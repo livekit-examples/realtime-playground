@@ -68,7 +68,7 @@ The web frontend can be deployed using your preferred Next.js hosting solution, 
 
 Ensure the following:
 
-- Both web and and agent are running
+- Both web and agent are running
 - Environment variables are set up correctly
 - Correct versions of Node.js, pnpm, and Python are installed
 

@@ -59,6 +59,7 @@ export function ConfigurationForm() {
     const values = pgState.sessionConfig;
     const attributes: { [key: string]: string } = {
       instructions: pgState.instructions,
+      voice: values.voice,
       turn_detection: JSON.stringify({
         type: values.turnDetection,
         threshold: values.vadThreshold,
@@ -86,7 +87,6 @@ export function ConfigurationForm() {
     if (onlyVoiceChanged) {
       return;
     }
-
     localParticipant
       .setAttributes(attributes)
       .catch((e) => {

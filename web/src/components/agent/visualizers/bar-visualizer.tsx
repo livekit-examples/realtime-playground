@@ -26,7 +26,7 @@ export const AgentBarVisualizer = ({
     gridColumns,
     animationOptions?.interval ?? 100,
     state !== "speaking" ? "active" : "paused",
-    animationOptions
+    animationOptions,
   );
 
   // TODO: Remove useMemo
