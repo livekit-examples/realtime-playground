@@ -134,7 +134,7 @@ export function AuthDialog({
                     >
                       OpenAI API key
                     </a>{" "}
-                    to connect he playground to your own OpenAI platform
+                    to connect the playground to your own OpenAI platform
                     account.
                   </DialogDescription>
                 </DialogHeader>
