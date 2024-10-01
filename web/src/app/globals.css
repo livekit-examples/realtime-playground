@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  font-weight: 300;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.lk-audio-bar-visualizer {
+  gap: 12px !important;
+
+  & > .lk-audio-bar {
+    /* aspect-ratio: 1/1; */
+    /* width: auto !important; */
+    width: 64px !important;
+    min-height: 64px !important;
+    background-color: rgba(0, 0, 0, 0.05) !important;
+  }
+
+  &[data-lk-va-state='speaking'] > .lk-audio-bar,
+  & > .lk-audio-bar.lk-highlighted,
+  & > [data-lk-highlighted='true'] {
+    @apply bg-black !important;
+  }
+
+  & > [data-lk-highlighted='false'] {
+    @apply bg-black/10 !important;
+  }
+}
+
+@font-face {
+  font-family: 'Commit Mono';
+  src: url('/fonts/CommitMono-400-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Commit Mono';
+  src: url('/fonts/CommitMono-700-Regular.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
