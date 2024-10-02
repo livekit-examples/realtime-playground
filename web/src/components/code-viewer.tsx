@@ -173,10 +173,7 @@ cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url), workerType
           </div>
           <div className="mt-4 flex justify-end flex-shrink-0">
             <Button asChild variant="default">
-              <a
-                href="https://docs.livekit.io/agents/openai/guide"
-                target="_blank"
-              >
+              <a href="https://docs.livekit.io/agents/openai" target="_blank">
                 <ArrowUpRight className="h-5 w-5 mr-2" />
                 Get building!
               </a>
