@@ -194,7 +194,7 @@ async function runMultimodalAgent(
           case "server_error":
             message = `⚠️ Server error`;
             break;
-          case "rate_limit_error":
+          case "rate_limit_exceeded":
             message = `⚠️ Rate limit exceeded`;
             break;
           default:

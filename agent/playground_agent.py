@@ -178,7 +178,7 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
                 error_code = response.status_details['error']['code']
                 if error_code == "server_error":
                     message = "⚠️ Server error"
-                elif error_code == "rate_limit_error":
+                elif error_code == "rate_limit_exceeded":
                     message = "⚠️ Rate limit exceeded"
                 else:
                     message = "⚠️ Response failed"
