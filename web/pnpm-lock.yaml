@@ -12,8 +12,8 @@ importers:
         specifier: ^3.9.0
         version: 3.9.0(react-hook-form@7.53.0(react@18.3.1))
       '@livekit/components-react':
-        specifier: ^2.6.2
-        version: 2.6.2(@livekit/krisp-noise-filter@0.2.12(livekit-client@2.5.5))(livekit-client@2.5.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)
+        specifier: ^2.6.4
+        version: 2.6.4(@livekit/krisp-noise-filter@0.2.12(livekit-client@2.5.5))(livekit-client@2.5.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)
       '@livekit/components-styles':
         specifier: ^1.1.2
         version: 1.1.2
@@ -899,15 +899,15 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@livekit/components-core@0.11.7':
-    resolution: {integrity: sha512-LMM08YI8aH1TMIXjV2FjCfUIfGx2a5Li4nFBKFPWztV+IANKegvqqdnBG8UpAO4rYXhVecRtxweNYuJtoFdRfA==}
+  '@livekit/components-core@0.11.8':
+    resolution: {integrity: sha512-VfnCRFZxTRt0pjtmLDUdOccbV+auUx/0wjjdv9q5Ubi9fiLHj+QaxQ64nG4040Ib9Ihsev6A02iybSEGqRBEZw==}
     engines: {node: '>=18'}
     peerDependencies:
       livekit-client: ^2.5.4
       tslib: ^2.6.2
 
-  '@livekit/components-react@2.6.2':
-    resolution: {integrity: sha512-tP5yLzpOt74ikFX8aQeYwfEfNEAjlxKtFYxq5oK58+Plqowd2ltBPTXyOlZLkLpVRu6s8eOIUNhPifvvAwjO1A==}
+  '@livekit/components-react@2.6.4':
+    resolution: {integrity: sha512-DwR05R9JBKXvEPGhBFsqTQ7ev8cJHEL4U2fkatf7cyb2SkJkEkF6axDf3xHsSGjgUEUnDPvbSpntsj/ZDRWPEQ==}
     engines: {node: '>=18'}
     peerDependencies:
       '@livekit/krisp-noise-filter': ^0.2.12
@@ -4881,7 +4881,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@livekit/components-core@0.11.7(livekit-client@2.5.5)(tslib@2.7.0)':
+  '@livekit/components-core@0.11.8(livekit-client@2.5.5)(tslib@2.7.0)':
     dependencies:
       '@floating-ui/dom': 1.6.11
       livekit-client: 2.5.5
@@ -4889,9 +4889,9 @@ snapshots:
       rxjs: 7.8.1
       tslib: 2.7.0
 
-  '@livekit/components-react@2.6.2(@livekit/krisp-noise-filter@0.2.12(livekit-client@2.5.5))(livekit-client@2.5.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)':
+  '@livekit/components-react@2.6.4(@livekit/krisp-noise-filter@0.2.12(livekit-client@2.5.5))(livekit-client@2.5.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(tslib@2.7.0)':
     dependencies:
-      '@livekit/components-core': 0.11.7(livekit-client@2.5.5)(tslib@2.7.0)
+      '@livekit/components-core': 0.11.8(livekit-client@2.5.5)(tslib@2.7.0)
       clsx: 2.1.1
       livekit-client: 2.5.5
       react: 18.3.1
