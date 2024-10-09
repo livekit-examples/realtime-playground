@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@livekit/agents':
-        specifier: ^0.3.1
-        version: 0.3.1
+        specifier: ^0.3.2
+        version: 0.3.2
       '@livekit/agents-plugin-openai':
-        specifier: ^0.3.1
-        version: 0.3.1
+        specifier: ^0.3.2
+        version: 0.3.2
       '@livekit/rtc-node':
         specifier: ^0.9.1
         version: 0.9.1
@@ -79,11 +79,11 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@livekit/agents-plugin-openai@0.3.1':
-    resolution: {integrity: sha512-G5g/mPJrCYYJyWNpRU/tuVVJdsloc1Utoeq/RlpGRqtHXPIqaxK9g29h9E+XZeo67iKBA5xrxR4so1GJfDVXqg==}
+  '@livekit/agents-plugin-openai@0.3.2':
+    resolution: {integrity: sha512-Dpu08vbeWpL8hiIbfYRne/ob/I5QX98sOa1PV0MgeF93K73cTg+W64PUeopBiUGtYiQNIz4tJ3QbiSvakkXAmA==}
 
-  '@livekit/agents@0.3.1':
-    resolution: {integrity: sha512-a7Xnha2wqGefTRPNm+U/B+PsKp3Mp4jb9ihwL7NfstaPBuX0+z19qewxBQzAkHtHkaf/+P4zpnehkr8dPLxgQA==}
+  '@livekit/agents@0.3.2':
+    resolution: {integrity: sha512-ViMduU3ClF4szSGIaVzqfW44701tiEzI0wx8Li4o0mJYnD8KBgfAgvxa9CYrIGPcC/OayLzYdoY5uQguDduC6Q==}
 
   '@livekit/protocol@1.23.0':
     resolution: {integrity: sha512-Hh83moW437mWhiyRgoDMedJ/s/rCTfe3ACSaIJ3n2NlVaq/+BTuB/yH7a6alM1NEkGBSmgrEHxabDfozVUlgYg==}
@@ -745,16 +745,16 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@livekit/agents-plugin-openai@0.3.1':
+  '@livekit/agents-plugin-openai@0.3.2':
     dependencies:
-      '@livekit/agents': 0.3.1
+      '@livekit/agents': 0.3.2
       '@livekit/rtc-node': 0.9.1
       ws: 8.18.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@livekit/agents@0.3.1':
+  '@livekit/agents@0.3.2':
     dependencies:
       '@livekit/protocol': 1.23.0
       '@livekit/rtc-node': 0.9.1
