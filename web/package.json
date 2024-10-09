@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
-    "@livekit/components-react": "^2.6.2",
+    "@livekit/components-react": "^2.6.4",
     "@livekit/components-styles": "^1.1.2",
     "@livekit/krisp-noise-filter": "^0.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.1",

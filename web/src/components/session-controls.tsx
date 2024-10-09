@@ -14,10 +14,10 @@ import { useEffect, useState } from "react";
 
 import {
   TrackToggle,
-  useKrispNoiseFilter,
   useLocalParticipant,
   useMediaDeviceSelect,
 } from "@livekit/components-react";
+import { useKrispNoiseFilter } from "@livekit/components-react/krisp";
 import { Track } from "livekit-client";
 
 import { useConnection } from "@/hooks/use-connection";
