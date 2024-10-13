@@ -28,7 +28,7 @@ class SessionConfig:
     openai_api_key: str
     instructions: str
     voice: openai.realtime.api_proto.Voice
-    temperature: float 
+    temperature: float
     max_response_output_tokens: str | int
     modalities: list[openai.realtime.api_proto.Modality]
     turn_detection: openai.realtime.ServerVadOptions
@@ -51,7 +51,7 @@ class SessionConfig:
 
 def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
     turn_detection = None
-    
+
     if data.get("turn_detection"):
         turn_detection_json = json.loads(data.get("turn_detection"))
         turn_detection = openai.realtime.ServerVadOptions(
@@ -61,7 +61,7 @@ def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
         )
     else:
         turn_detection = openai.realtime.DEFAULT_SERVER_VAD_OPTIONS
-    
+
     config = SessionConfig(
         openai_api_key=data.get("openai_api_key", ""),
         instructions=data.get("instructions", ""),
@@ -118,9 +118,9 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
     def on_attributes_changed(
         changed_attributes: dict[str, str], changed_participant: rtc.Participant
     ):
-        if changed_participant == participant:
+        if changed_participant != participant:
             return
-        
+
         new_config = parse_session_config(
             {**participant.attributes, **changed_attributes}
         )
