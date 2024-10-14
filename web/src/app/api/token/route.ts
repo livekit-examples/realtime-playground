@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     },
   }: PlaygroundState = await request.json();
 
-  const roomName = Math.random().toString(36).substring(7);
+  const roomName = Math.random().toString(36).slice(7);
   const apiKey = process.env.LIVEKIT_API_KEY;
   const apiSecret = process.env.LIVEKIT_API_SECRET;
   if (!apiKey || !apiSecret) {
