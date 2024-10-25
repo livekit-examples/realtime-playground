@@ -5,7 +5,7 @@ import json
 import logging
 import uuid
 from dataclasses import asdict, dataclass
-from typing import Any, Dict
+from typing import Any, Dict, Literal
 
 from livekit import rtc
 from livekit.agents import (
@@ -48,6 +48,8 @@ class SessionConfig:
         }
         return modalities_map.get(modalities, ["text", "audio"])
 
+    def __eq__(self, other: SessionConfig) -> bool:
+        return self.to_dict() == other.to_dict()
 
 def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
     turn_detection = None
@@ -114,93 +116,66 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         )
         session.response.create()
 
-    @ctx.room.on("participant_attributes_changed")
-    def on_attributes_changed(
-        changed_attributes: dict[str, str], changed_participant: rtc.Participant
+    async def update_config(
+        request_id: str,
+        caller_identity: str,
+        payload: str,
+        response_timeout_ms: int,
     ):
-        if changed_participant != participant:
+        if caller_identity != participant.identity:
             return
 
-        new_config = parse_session_config(
-            {**participant.attributes, **changed_attributes}
-        )
-        logger.info(f"participant attributes changed: {new_config.to_dict()}, participant: {changed_participant.identity}")
-        session = model.sessions[0]
-        session.session_update(
-            instructions=new_config.instructions,
-            voice=new_config.voice,
-            temperature=new_config.temperature,
-            max_response_output_tokens=new_config.max_response_output_tokens,
-            turn_detection=new_config.turn_detection,
-            modalities=new_config.modalities,
-        )
-
-    async def send_transcription(
-        ctx: JobContext,
-        participant: rtc.Participant,
-        track_sid: str,
-        segment_id: str,
-        text: str,
-        is_final: bool = True,
-    ):
-        transcription = rtc.Transcription(
-            participant_identity=participant.identity,
-            track_sid=track_sid,
-            segments=[
-                rtc.TranscriptionSegment(
-                    id=segment_id,
-                    text=text,
-                    start_time=0,
-                    end_time=0,
-                    language="en",
-                    final=is_final,
-                )
-            ],
-        )
-        await ctx.room.local_participant.publish_transcription(transcription)
+        new_config = parse_session_config(json.loads(payload))
+        if config != new_config:
+            logger.info(f"participant attributes changed: {new_config.to_dict()}, participant: {participant.identity}")
+            session = model.sessions[0]
+            session.session_update(
+                instructions=new_config.instructions,
+                voice=new_config.voice,
+                temperature=new_config.temperature,
+                max_response_output_tokens=new_config.max_response_output_tokens,
+                turn_detection=new_config.turn_detection,
+                modalities=new_config.modalities,
+            )
+            return json.dumps({"changed": True})
+        else:
+            return json.dumps({"changed": False})    
+    
+    ctx.room.local_participant.register_rpc_method(
+        "pg.updateConfig",
+        update_config
+    )
 
     @session.on("response_done")
     def on_response_done(response: openai.realtime.RealtimeResponse):
-        message = None
+        error: Literal["max_output_tokens", "content_filter", "incomplete", "server_error", "rate_limit", "failed"] | None = None
         if response.status == "incomplete":
             if response.status_details and response.status_details['reason']:
                 reason = response.status_details['reason']
                 if reason == "max_output_tokens":
-                    message = "🚫 Max output tokens reached"
+                    error = "max_output_tokens"
                 elif reason == "content_filter":
-                    message = "🚫 Content filter applied"
+                    error = "content_filter"
                 else:
-                    message = f"🚫 Response incomplete: {reason}"
+                    error = "incomplete"
             else:
-                message = "🚫 Response incomplete"
+                error = "incomplete"
         elif response.status == "failed":
             if response.status_details and response.status_details['error']:
                 error_code = response.status_details['error']['code']
                 if error_code == "server_error":
-                    message = "⚠️ Server error"
+                    error = "server_error"
                 elif error_code == "rate_limit_exceeded":
-                    message = "⚠️ Rate limit exceeded"
+                    error = "rate_limit"
                 else:
-                    message = "⚠️ Response failed"
+                    error = "failed"
             else:
-                message = "⚠️ Response failed"
+                error = "failed"
         else:
             return
 
-        local_participant = ctx.room.local_participant
-        track_sid = next(
-            (
-                track.sid
-                for track in local_participant.track_publications.values()
-                if track.source == rtc.TrackSource.SOURCE_MICROPHONE
-            ),
-            None,
-        )
-
         asyncio.create_task(
-            send_transcription(
-                ctx, local_participant, track_sid, "status-" + str(uuid.uuid4()), message
-            )
+            ctx.room.local_participant.perform_rpc(participant.identity, "pg.responseError", error)
         )
 
     last_transcript_id = None
