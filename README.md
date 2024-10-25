@@ -47,7 +47,10 @@ This directory houses the web frontend, built with Next.js.
 #### Node.js Version
 
 1. Install dependencies: `pnpm install`
-2. Run the agent in development mode: `pnpm dev`
+2. Load the environment variables:
+   - On macOS and Linux: `source .env.local`
+   - On Windows: `set -a; . .env.local; set +a`
+3. Run the agent in development mode: `pnpm dev`
 
 ### Web Frontend Setup
 
