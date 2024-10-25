@@ -118,30 +118,19 @@ async function runMultimodalAgent(
   });
   session.response.create();
 
-  ctx.room.on(
-    "participantAttributesChanged",
-    (
-      changedAttributes: Record<string, string>,
-      changedParticipant: Participant,
-    ) => {
-      if (changedParticipant !== participant) {
-        return;
-      }
-      const newConfig = parseSessionConfig({
-        ...changedParticipant.attributes,
-        ...changedAttributes,
-      });
+  ctx.room.localParticipant?.registerRpcMethod("pg.updateConfig", async (requestId, callerIdentity, payload, responseTimeoutMs) => {
+    const newConfig = parseSessionConfig(JSON.parse(payload));
+    session.sessionUpdate({
+      instructions: newConfig.instructions,
+      temperature: newConfig.temperature,
+      maxResponseOutputTokens: newConfig.maxOutputTokens,
+      modalities: newConfig.modalities as ["text", "audio"] | ["text"],
+      turnDetection: newConfig.turnDetection,
+    });
 
-      session.sessionUpdate({
-        instructions: newConfig.instructions,
-        temperature: newConfig.temperature,
-        maxResponseOutputTokens: newConfig.maxOutputTokens,
-        modalities: newConfig.modalities as ["text", "audio"] | ["text"],
-        turnDetection: newConfig.turnDetection,
-      });
-    },
-  );
-
+    return JSON.stringify({ success: true });
+  });
+ 
   async function sendTranscription(
     ctx: JobContext,
     participant: Participant,

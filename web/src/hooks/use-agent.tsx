@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import {
   useMaybeRoomContext,
   useVoiceAssistant,
+  useLocalParticipant,
 } from "@livekit/components-react";
 import {
   RoomEvent,
@@ -29,6 +30,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   const room = useMaybeRoomContext();
   const { shouldConnect } = useConnection();
   const { agent } = useVoiceAssistant();
+  const { localParticipant } = useLocalParticipant();
   const [rawSegments, setRawSegments] = useState<{
     [id: string]: Transcription;
   }>({});
@@ -59,6 +61,15 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
       room.off(RoomEvent.TranscriptionReceived, updateRawSegments);
     };
   }, [room]);
+
+  useEffect(() => {
+    if (localParticipant) {
+      localParticipant.registerRpcMethod("hi", async (requestId, callerIdentity, payload, responseTimeoutMs) => {
+        console.log("RPC HI");
+        return "hi";
+      });
+    }
+  }, [localParticipant]);
 
   useEffect(() => {
     const sorted = Object.values(rawSegments).sort(

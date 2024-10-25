@@ -20,7 +20,7 @@
   "dependencies": {
     "@livekit/agents": "^0.3.2",
     "@livekit/agents-plugin-openai": "^0.3.2",
-    "@livekit/rtc-node": "^0.9.1",
+    "@livekit/rtc-node": "file:../../../livekit/node-sdks/packages/livekit-rtc",
     "eslint": "^8",
     "eslint-config-prettier": "^8.10.0",
     "eslint-plugin-prettier": "^5.1.3",

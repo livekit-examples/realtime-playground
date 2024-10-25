@@ -15,8 +15,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
       '@livekit/rtc-node':
-        specifier: ^0.9.1
-        version: 0.9.1
+        specifier: file:../../../livekit/node-sdks/packages/livekit-rtc
+        version: file:../../../livekit/node-sdks/packages/livekit-rtc
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -50,6 +50,9 @@ packages:
 
   '@bufbuild/protobuf@1.10.0':
     resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
+
+  '@bufbuild/protobuf@2.2.0':
+    resolution: {integrity: sha512-+imAQkHf7U/Rwvu0wk1XWgsP3WnpCWmK7B48f0XqSNzgk64+grljTKC7pnO/xBiEMUziF7vKRfbBnOQhg126qQ==}
 
   '@eslint-community/eslint-utils@4.4.0':
     resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
@@ -88,6 +91,9 @@ packages:
   '@livekit/agents@0.3.2':
     resolution: {integrity: sha512-ViMduU3ClF4szSGIaVzqfW44701tiEzI0wx8Li4o0mJYnD8KBgfAgvxa9CYrIGPcC/OayLzYdoY5uQguDduC6Q==}
 
+  '@livekit/mutex@1.0.0':
+    resolution: {integrity: sha512-aiUhoThBNF9UyGTxEURFzJLhhPLIVTnQiEVMjRhPnfHNKLfo2JY9xovHKIus7B78UD5hsP6DlgpmAsjrz4U0Iw==}
+
   '@livekit/protocol@1.23.0':
     resolution: {integrity: sha512-Hh83moW437mWhiyRgoDMedJ/s/rCTfe3ACSaIJ3n2NlVaq/+BTuB/yH7a6alM1NEkGBSmgrEHxabDfozVUlgYg==}
 
@@ -123,6 +129,10 @@ packages:
 
   '@livekit/rtc-node@0.9.1':
     resolution: {integrity: sha512-2kNxT3JNzjKWW7i0Q7o/JH9gB9ZFIcllbYFduGm97gzkQJcVKnhqyjd6Y7/RxGZTq0wh3lNR6D+FdDGnKOqjpA==}
+    engines: {node: '>= 18'}
+
+  '@livekit/rtc-node@file:../../../livekit/node-sdks/packages/livekit-rtc':
+    resolution: {directory: ../../../livekit/node-sdks/packages/livekit-rtc, type: directory}
     engines: {node: '>= 18'}
 
   '@livekit/typed-emitter@3.0.0':
@@ -719,6 +729,8 @@ snapshots:
 
   '@bufbuild/protobuf@1.10.0': {}
 
+  '@bufbuild/protobuf@2.2.0': {}
+
   '@eslint-community/eslint-utils@4.4.0(eslint@8.57.1)':
     dependencies:
       eslint: 8.57.1
@@ -777,6 +789,8 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
+  '@livekit/mutex@1.0.0': {}
+
   '@livekit/protocol@1.23.0':
     dependencies:
       '@bufbuild/protobuf': 1.10.0
@@ -806,6 +820,12 @@ snapshots:
       '@livekit/rtc-node-linux-arm64-gnu': 0.9.1
       '@livekit/rtc-node-linux-x64-gnu': 0.9.1
       '@livekit/rtc-node-win32-x64-msvc': 0.9.1
+
+  '@livekit/rtc-node@file:../../../livekit/node-sdks/packages/livekit-rtc':
+    dependencies:
+      '@bufbuild/protobuf': 2.2.0
+      '@livekit/mutex': 1.0.0
+      '@livekit/typed-emitter': 3.0.0
 
   '@livekit/typed-emitter@3.0.0': {}
 
