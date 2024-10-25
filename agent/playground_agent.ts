@@ -141,84 +141,48 @@ async function runMultimodalAgent(
     }
   );
 
-  async function sendTranscription(
-    ctx: JobContext,
-    participant: Participant,
-    trackSid: string,
-    segmentId: string,
-    text: string,
-    isFinal: boolean = true
-  ) {
-    const transcription = {
-      participantIdentity: participant.identity,
-      trackSid: trackSid,
-      segments: [
-        {
-          id: segmentId,
-          text: text,
-          startTime: BigInt(0),
-          endTime: BigInt(0),
-          language: "",
-          final: isFinal,
-        },
-      ],
-    };
-    await (ctx.room.localParticipant as LocalParticipant).publishTranscription(
-      transcription
-    );
-  }
-
   session.on("response_done", (response: openai.realtime.RealtimeResponse) => {
-    let message: string | undefined;
+    let error: "max_output_tokens" | "content_filter" | "incomplete" | "server_error" | "rate_limit" | "failed" | undefined;
     if (response.status === "incomplete") {
       if (response.statusDetails?.reason) {
         const reason = response.statusDetails.reason;
         switch (reason) {
           case "max_output_tokens":
-            message = "🚫 Max output tokens reached";
+            error = "max_output_tokens";
             break;
           case "content_filter":
-            message = "🚫 Content filter applied";
+            error = "content_filter";
             break;
           default:
-            message = `🚫 Response incomplete: ${reason}`;
+            error = "incomplete";
             break;
         }
       } else {
-        message = "🚫 Response incomplete";
+        error = "incomplete";
       }
     } else if (response.status === "failed") {
       if (response.statusDetails?.error) {
         switch (response.statusDetails.error.code) {
           case "server_error":
-            message = `⚠️ Server error`;
+            error = "server_error";
             break;
           case "rate_limit_exceeded":
-            message = `⚠️ Rate limit exceeded`;
+            error = "rate_limit";
             break;
           default:
-            message = `⚠️ Response failed`;
+            error = "failed";
             break;
         }
       } else {
-        message = "⚠️ Response failed";
+        error = "failed";
       }
     } else {
       return;
     }
 
-    const localParticipant = ctx.room.localParticipant as LocalParticipant;
-    const trackSid = getMicrophoneTrackSid(localParticipant);
-
-    if (trackSid) {
-      sendTranscription(
-        ctx,
-        localParticipant,
-        trackSid,
-        "status-" + uuidv4(),
-        message
-      );
-    }
+    (async () => {
+      await ctx.room.localParticipant?.performRpc(participant.identity, "pg.responseError", error);
+    })();
   });
 }
 

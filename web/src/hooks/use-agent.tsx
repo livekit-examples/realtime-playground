@@ -12,7 +12,7 @@ import {
   RemoteParticipant,
 } from "livekit-client";
 import { useConnection } from "@/hooks/use-connection";
-
+import { useToast } from "@/hooks/use-toast";
 interface Transcription {
   segment: TranscriptionSegment;
   participant?: Participant;
@@ -37,6 +37,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   const [displayTranscriptions, setDisplayTranscriptions] = useState<
     Transcription[]
   >([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!room) {
@@ -45,7 +46,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     const updateRawSegments = (
       segments: TranscriptionSegment[],
       participant?: Participant,
-      publication?: TrackPublication,
+      publication?: TrackPublication
     ) => {
       setRawSegments((prev) => {
         const newSegments = { ...prev };
@@ -64,17 +65,55 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (localParticipant) {
-      localParticipant.registerRpcMethod("hi", async (requestId, callerIdentity, payload, responseTimeoutMs) => {
-        console.log("RPC HI");
-        return "hi";
-      });
+      localParticipant.registerRpcMethod(
+        "pg.responseError",
+        async (requestId, callerIdentity, payload, responseTimeoutMs) => {
+          let errorMessage: string;
+          let variant: "warning" | "destructive";
+          switch (payload) {
+            case "max_output_tokens":
+              errorMessage = "Max output tokens reached";
+              variant = "warning";
+              break;
+            case "content_filter":
+              errorMessage = "Content filter applied";
+              variant = "warning";
+              break;
+            case "incomplete":
+              errorMessage = "Unknown issue";
+              variant = "warning";
+              break;
+            case "server_error":
+              errorMessage = "Server error";
+              variant = "destructive";
+              break;
+            case "rate_limit":
+              errorMessage = "Rate limit exceeded";
+              variant = "destructive";
+              break;
+            case "failed":
+              errorMessage = "Response failed";
+              variant = "destructive";
+              break;
+            default:
+              errorMessage = "An unknown error occurred";
+              variant = "destructive";
+          }
+          toast({
+            title: variant === "warning" ? "Incomplete Response" : "Response Error",
+            description: errorMessage,
+            variant,
+          });
+          return "";
+        }
+      );
     }
-  }, [localParticipant]);
+  }, [localParticipant, toast]);
 
   useEffect(() => {
     const sorted = Object.values(rawSegments).sort(
       (a, b) =>
-        (a.segment.firstReceivedTime ?? 0) - (b.segment.firstReceivedTime ?? 0),
+        (a.segment.firstReceivedTime ?? 0) - (b.segment.firstReceivedTime ?? 0)
     );
     const mergedSorted = sorted.reduce((acc, current) => {
       if (acc.length === 0) {
