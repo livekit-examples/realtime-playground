@@ -105,9 +105,7 @@ export function ConfigurationForm() {
         toast({
           title: "Configuration Updated",
           description: "Your changes have been applied successfully.",
-          variant: "default",
-          duration: 3000,
-          className: "bg-green-500 text-white",
+          variant: "success",
         });
       }
     } catch (e) {
@@ -116,8 +114,6 @@ export function ConfigurationForm() {
         description:
           "There was an error updating your configuration. Please try again.",
         variant: "destructive",
-        duration: 5000,
-        className: "bg-red-500 text-white",
       });
     }
   }, [

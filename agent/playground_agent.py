@@ -51,6 +51,7 @@ class SessionConfig:
     def __eq__(self, other: SessionConfig) -> bool:
         return self.to_dict() == other.to_dict()
 
+
 def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
     turn_detection = None
 
@@ -69,7 +70,9 @@ def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
         instructions=data.get("instructions", ""),
         voice=data.get("voice", "alloy"),
         temperature=float(data.get("temperature", 0.8)),
-        max_response_output_tokens=data.get("max_output_tokens") if data.get("max_output_tokens") == 'inf' else int(data.get("max_output_tokens") or 2048),
+        max_response_output_tokens=data.get("max_output_tokens")
+        if data.get("max_output_tokens") == "inf"
+        else int(data.get("max_output_tokens") or 2048),
         modalities=SessionConfig._modalities_from_string(
             data.get("modalities", "text_and_audio")
         ),
@@ -128,7 +131,9 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
 
         new_config = parse_session_config(json.loads(payload))
         if config != new_config:
-            logger.info(f"participant attributes changed: {new_config.to_dict()}, participant: {participant.identity}")
+            logger.info(
+                f"participant attributes changed: {new_config.to_dict()}, participant: {participant.identity}"
+            )
             session = model.sessions[0]
             session.session_update(
                 instructions=new_config.instructions,
@@ -140,38 +145,85 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
             )
             return json.dumps({"changed": True})
         else:
-            return json.dumps({"changed": False})    
+            return json.dumps({"changed": False})
 
     @session.on("response_done")
     def on_response_done(response: openai.realtime.RealtimeResponse):
-        error: Literal["max_output_tokens", "content_filter", "incomplete", "server_error", "rate_limit", "failed"] | None = None
+        variant: Literal["warning", "destructive"]
+        description: str | None = None
+        title: str
         if response.status == "incomplete":
-            if response.status_details and response.status_details['reason']:
-                reason = response.status_details['reason']
+            if response.status_details and response.status_details["reason"]:
+                reason = response.status_details["reason"]
                 if reason == "max_output_tokens":
-                    error = "max_output_tokens"
+                    variant = "warning"
+                    title = "Max output tokens reached"
+                    description = "Response may be incomplete"
                 elif reason == "content_filter":
-                    error = "content_filter"
+                    variant = "warning"
+                    title = "Content filter applied"
+                    description = "Response may be incomplete"
                 else:
-                    error = "incomplete"
+                    variant = "warning"
+                    title = "Response incomplete"
             else:
-                error = "incomplete"
+                variant = "warning"
+                title = "Response incomplete"
         elif response.status == "failed":
-            if response.status_details and response.status_details['error']:
-                error_code = response.status_details['error']['code']
+            if response.status_details and response.status_details["error"]:
+                error_code = response.status_details["error"]["code"]
                 if error_code == "server_error":
-                    error = "server_error"
+                    variant = "destructive"
+                    title = "Server error"
                 elif error_code == "rate_limit_exceeded":
-                    error = "rate_limit"
+                    variant = "destructive"
+                    title = "Rate limit exceeded"
                 else:
-                    error = "failed"
+                    variant = "destructive"
+                    title = "Response failed"
             else:
-                error = "failed"
+                variant = "destructive"
+                title = "Response failed"
         else:
             return
 
         asyncio.create_task(
-            ctx.room.local_participant.perform_rpc(participant.identity, "pg.responseError", error)
+            show_toast(title, description, variant)
+        )
+
+    async def send_transcription(
+        ctx: JobContext,
+        participant: rtc.Participant,
+        track_sid: str,
+        segment_id: str,
+        text: str,
+        is_final: bool = True,
+    ):
+        transcription = rtc.Transcription(
+            participant_identity=participant.identity,
+            track_sid=track_sid,
+            segments=[
+                rtc.TranscriptionSegment(
+                    id=segment_id,
+                    text=text,
+                    start_time=0,
+                    end_time=0,
+                    language="en",
+                    final=is_final,
+                )
+            ],
+        )
+        await ctx.room.local_participant.publish_transcription(transcription)
+
+    async def show_toast(
+        title: str, description: str | None, variant: Literal["default", "success","warning", "destructive"]
+    ):
+        await ctx.room.local_participant.perform_rpc(
+            participant.identity,
+            "pg.toast",
+            json.dumps(
+                {"title": title, "description": description, "variant": variant}
+            ),
         )
 
     last_transcript_id = None

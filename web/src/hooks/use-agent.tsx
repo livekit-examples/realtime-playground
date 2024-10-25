@@ -66,45 +66,16 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (localParticipant) {
       localParticipant.registerRpcMethod(
-        "pg.responseError",
+        "pg.toast",
         async (requestId, callerIdentity, payload, responseTimeoutMs) => {
-          let errorMessage: string;
-          let variant: "warning" | "destructive";
-          switch (payload) {
-            case "max_output_tokens":
-              errorMessage = "Max output tokens reached";
-              variant = "warning";
-              break;
-            case "content_filter":
-              errorMessage = "Content filter applied";
-              variant = "warning";
-              break;
-            case "incomplete":
-              errorMessage = "Unknown issue";
-              variant = "warning";
-              break;
-            case "server_error":
-              errorMessage = "Server error";
-              variant = "destructive";
-              break;
-            case "rate_limit":
-              errorMessage = "Rate limit exceeded";
-              variant = "destructive";
-              break;
-            case "failed":
-              errorMessage = "Response failed";
-              variant = "destructive";
-              break;
-            default:
-              errorMessage = "An unknown error occurred";
-              variant = "destructive";
-          }
+          const { title, description, variant } = JSON.parse(payload);
+          console.log(title, description, variant);
           toast({
-            title: variant === "warning" ? "Incomplete Response" : "Response Error",
-            description: errorMessage,
+            title,
+            description,
             variant,
           });
-          return "";
+          return JSON.stringify({"shown": true});
         }
       );
     }
