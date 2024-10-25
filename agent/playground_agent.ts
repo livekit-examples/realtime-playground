@@ -65,16 +65,22 @@ function parseSessionConfig(data: any): SessionConfig {
   };
 }
 
-
 function configEqual(obj1: any, obj2: any): boolean {
   if (obj1 === obj2) return true;
-  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) return false;
+  if (
+    typeof obj1 !== "object" ||
+    obj1 === null ||
+    typeof obj2 !== "object" ||
+    obj2 === null
+  )
+    return false;
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
   if (keys1.length !== keys2.length) return false;
   for (const key of keys1) {
     if (key === "openaiApiKey") continue;
-    if (!keys2.includes(key) || !configEqual(obj1[key], obj2[key])) return false;
+    if (!keys2.includes(key) || !configEqual(obj1[key], obj2[key]))
+      return false;
   }
   return true;
 }
@@ -89,9 +95,19 @@ function modalitiesFromString(
   return modalitiesMap[modalities] || ["text", "audio"];
 }
 
-function showToast(ctx: JobContext, participant: Participant, title: string, description: string | undefined, variant: "success" | "warning" | "destructive" | "default") {
-  ctx.room.localParticipant?.performRpc(participant.identity, "pg.toast", JSON.stringify({ title, description, variant }));
-} 
+function showToast(
+  ctx: JobContext,
+  participant: Participant,
+  title: string,
+  description: string | undefined,
+  variant: "success" | "warning" | "destructive" | "default"
+) {
+  ctx.room.localParticipant?.performRpc(
+    participant.identity,
+    "pg.toast",
+    JSON.stringify({ title, description, variant })
+  );
+}
 
 async function runMultimodalAgent(
   ctx: JobContext,
@@ -133,10 +149,17 @@ async function runMultimodalAgent(
 
   ctx.room.localParticipant?.registerRpcMethod(
     "pg.updateConfig",
-    async (requestId: string, callerIdentity: string, payload: string, responseTimeoutMs: number) => {
+    async (
+      requestId: string,
+      callerIdentity: string,
+      payload: string,
+      responseTimeoutMs: number
+    ) => {
       const newConfig = parseSessionConfig(JSON.parse(payload));
       if (!configEqual(newConfig, lastConfig)) {
-        console.log(`updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`);
+        console.log(
+          `updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`
+        );
         lastConfig = newConfig;
         session.sessionUpdate({
           instructions: newConfig.instructions,

@@ -82,7 +82,7 @@ export function ConfigurationForm() {
     const onlyVoiceChanged = Object.keys(attributes).every(
       (key) =>
         key === "voice" ||
-        attributes[key] === (localParticipant.attributes[key] as string)
+        attributes[key] === (localParticipant.attributes[key] as string),
     );
 
     // If only voice changed, or if there were no existing attributes, don't update or show toast
@@ -98,7 +98,7 @@ export function ConfigurationForm() {
       let response = await localParticipant.performRpc(
         agent.identity,
         "pg.updateConfig",
-        JSON.stringify(attributes)
+        JSON.stringify(attributes),
       );
       let responseObj = JSON.parse(response);
       if (responseObj.changed) {

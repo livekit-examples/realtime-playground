@@ -46,7 +46,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     const updateRawSegments = (
       segments: TranscriptionSegment[],
       participant?: Participant,
-      publication?: TrackPublication
+      publication?: TrackPublication,
     ) => {
       setRawSegments((prev) => {
         const newSegments = { ...prev };
@@ -75,8 +75,8 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
             description,
             variant,
           });
-          return JSON.stringify({"shown": true});
-        }
+          return JSON.stringify({ shown: true });
+        },
       );
     }
   }, [localParticipant, toast]);
@@ -84,7 +84,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const sorted = Object.values(rawSegments).sort(
       (a, b) =>
-        (a.segment.firstReceivedTime ?? 0) - (b.segment.firstReceivedTime ?? 0)
+        (a.segment.firstReceivedTime ?? 0) - (b.segment.firstReceivedTime ?? 0),
     );
     const mergedSorted = sorted.reduce((acc, current) => {
       if (acc.length === 0) {

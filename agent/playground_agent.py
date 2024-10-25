@@ -187,9 +187,7 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         else:
             return
 
-        asyncio.create_task(
-            show_toast(title, description, variant)
-        )
+        asyncio.create_task(show_toast(title, description, variant))
 
     async def send_transcription(
         ctx: JobContext,
@@ -216,7 +214,9 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         await ctx.room.local_participant.publish_transcription(transcription)
 
     async def show_toast(
-        title: str, description: str | None, variant: Literal["default", "success","warning", "destructive"]
+        title: str,
+        description: str | None,
+        variant: Literal["default", "success", "warning", "destructive"],
     ):
         await ctx.room.local_participant.perform_rpc(
             participant.identity,
