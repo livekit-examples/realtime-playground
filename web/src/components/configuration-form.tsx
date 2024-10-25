@@ -82,7 +82,7 @@ export function ConfigurationForm() {
     const onlyVoiceChanged = Object.keys(attributes).every(
       (key) =>
         key === "voice" ||
-        attributes[key] === (localParticipant.attributes[key] as string),
+        attributes[key] === (localParticipant.attributes[key] as string)
     );
 
     // If only voice changed, or if there were no existing attributes, don't update or show toast
@@ -90,20 +90,26 @@ export function ConfigurationForm() {
       return;
     }
 
-
     if (!agent?.identity) {
       return;
     }
 
     try {
-      await localParticipant.performRpc(agent.identity, "pg.updateConfig", JSON.stringify(attributes));
-      toast({
-        title: "Configuration Updated",
-        description: "Your changes have been applied successfully.",
-        variant: "default",
-        duration: 3000,
-        className: "bg-green-500 text-white",
-      });
+      let response = await localParticipant.performRpc(
+        agent.identity,
+        "pg.updateConfig",
+        JSON.stringify(attributes)
+      );
+      let responseObj = JSON.parse(response);
+      if (responseObj.changed) {
+        toast({
+          title: "Configuration Updated",
+          description: "Your changes have been applied successfully.",
+          variant: "default",
+          duration: 3000,
+          className: "bg-green-500 text-white",
+        });
+      }
     } catch (e) {
       toast({
         title: "Error Updating Configuration",
@@ -114,7 +120,13 @@ export function ConfigurationForm() {
         className: "bg-red-500 text-white",
       });
     }
-  }, [pgState.sessionConfig, pgState.instructions, localParticipant, toast, agent]);
+  }, [
+    pgState.sessionConfig,
+    pgState.instructions,
+    localParticipant,
+    toast,
+    agent,
+  ]);
 
   // Function to debounce updates when user stops interacting
   const handleDebouncedUpdate = useCallback(() => {

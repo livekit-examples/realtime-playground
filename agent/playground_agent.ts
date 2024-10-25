@@ -66,7 +66,7 @@ function parseSessionConfig(data: any): SessionConfig {
 }
 
 function modalitiesFromString(
-  modalities: string,
+  modalities: string
 ): ["text", "audio"] | ["text"] {
   const modalitiesMap: { [key: string]: ["text", "audio"] | ["text"] } = {
     text_and_audio: ["text", "audio"],
@@ -77,18 +77,19 @@ function modalitiesFromString(
 
 function getMicrophoneTrackSid(participant: Participant): string | undefined {
   return Array.from(participant.trackPublications.values()).find(
-    (track: TrackPublication) => track.source === TrackSource.SOURCE_MICROPHONE,
+    (track: TrackPublication) => track.source === TrackSource.SOURCE_MICROPHONE
   )?.sid;
 }
 
 async function runMultimodalAgent(
   ctx: JobContext,
-  participant: RemoteParticipant,
+  participant: RemoteParticipant
 ) {
   const metadata = JSON.parse(participant.metadata);
   const config = parseSessionConfig(metadata);
+  var lastConfig = config;
   console.log(
-    `starting multimodal agent with config: ${safeLogConfig(config)}`,
+    `starting multimodal agent with config: ${safeLogConfig(config)}`
   );
 
   const model = new openai.realtime.RealtimeModel({
@@ -103,7 +104,7 @@ async function runMultimodalAgent(
 
   const agent = new multimodal.MultimodalAgent({ model });
   const session = (await agent.start(
-    ctx.room,
+    ctx.room
   )) as openai.realtime.RealtimeSession;
 
   session.conversation.item.create({
@@ -118,26 +119,35 @@ async function runMultimodalAgent(
   });
   session.response.create();
 
-  ctx.room.localParticipant?.registerRpcMethod("pg.updateConfig", async (requestId, callerIdentity, payload, responseTimeoutMs) => {
-    const newConfig = parseSessionConfig(JSON.parse(payload));
-    session.sessionUpdate({
-      instructions: newConfig.instructions,
-      temperature: newConfig.temperature,
-      maxResponseOutputTokens: newConfig.maxOutputTokens,
-      modalities: newConfig.modalities as ["text", "audio"] | ["text"],
-      turnDetection: newConfig.turnDetection,
-    });
+  ctx.room.localParticipant?.registerRpcMethod(
+    "pg.updateConfig",
+    async (requestId: string, callerIdentity: string, payload: string, responseTimeoutMs: number) => {
+      const newConfig = parseSessionConfig(JSON.parse(payload));
+      if (!configEqual(newConfig, lastConfig)) {
+        console.log(`updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`);
+        lastConfig = newConfig;
+        session.sessionUpdate({
+          instructions: newConfig.instructions,
+          temperature: newConfig.temperature,
+          maxResponseOutputTokens: newConfig.maxOutputTokens,
+          modalities: newConfig.modalities as ["text", "audio"] | ["text"],
+          turnDetection: newConfig.turnDetection,
+        });
 
-    return JSON.stringify({ success: true });
-  });
- 
+        return JSON.stringify({ changed: true });
+      } else {
+        return JSON.stringify({ changed: false });
+      }
+    }
+  );
+
   async function sendTranscription(
     ctx: JobContext,
     participant: Participant,
     trackSid: string,
     segmentId: string,
     text: string,
-    isFinal: boolean = true,
+    isFinal: boolean = true
   ) {
     const transcription = {
       participantIdentity: participant.identity,
@@ -154,7 +164,7 @@ async function runMultimodalAgent(
       ],
     };
     await (ctx.room.localParticipant as LocalParticipant).publishTranscription(
-      transcription,
+      transcription
     );
   }
 
@@ -206,10 +216,23 @@ async function runMultimodalAgent(
         localParticipant,
         trackSid,
         "status-" + uuidv4(),
-        message,
+        message
       );
     }
   });
+}
+
+function configEqual(obj1: any, obj2: any): boolean {
+  if (obj1 === obj2) return true;
+  if (typeof obj1 !== 'object' || obj1 === null || typeof obj2 !== 'object' || obj2 === null) return false;
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  if (keys1.length !== keys2.length) return false;
+  for (const key of keys1) {
+    if (key === "openaiApiKey") continue;
+    if (!keys2.includes(key) || !configEqual(obj1[key], obj2[key])) return false;
+  }
+  return true;
 }
 
 cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url) }));
