@@ -116,6 +116,7 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         )
         session.response.create()
 
+    @ctx.room.local_participant.rpc_method("pg.updateConfig")
     async def update_config(
         request_id: str,
         caller_identity: str,
@@ -140,11 +141,6 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
             return json.dumps({"changed": True})
         else:
             return json.dumps({"changed": False})    
-    
-    ctx.room.local_participant.register_rpc_method(
-        "pg.updateConfig",
-        update_config
-    )
 
     @session.on("response_done")
     def on_response_done(response: openai.realtime.RealtimeResponse):
