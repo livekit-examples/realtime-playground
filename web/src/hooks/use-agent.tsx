@@ -10,6 +10,7 @@ import {
   Participant,
   TrackPublication,
   RemoteParticipant,
+  type RpcInvocationData,
 } from "livekit-client";
 import { useConnection } from "@/hooks/use-connection";
 import { useToast } from "@/hooks/use-toast";
@@ -67,8 +68,8 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     if (localParticipant) {
       localParticipant.registerRpcMethod(
         "pg.toast",
-        async (requestId, callerIdentity, payload, responseTimeoutMs) => {
-          const { title, description, variant } = JSON.parse(payload);
+        async (data: RpcInvocationData) => {
+          const { title, description, variant } = JSON.parse(data.payload);
           console.log(title, description, variant);
           toast({
             title,

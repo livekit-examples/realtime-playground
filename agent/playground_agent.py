@@ -121,15 +121,12 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
 
     @ctx.room.local_participant.rpc_method("pg.updateConfig")
     async def update_config(
-        request_id: str,
-        caller_identity: str,
-        payload: str,
-        response_timeout_ms: int,
+        data: rtc.rpc.RpcInvocationData,
     ):
-        if caller_identity != participant.identity:
+        if data.caller_identity != participant.identity:
             return
 
-        new_config = parse_session_config(json.loads(payload))
+        new_config = parse_session_config(json.loads(data.payload))
         if config != new_config:
             logger.info(
                 f"participant attributes changed: {new_config.to_dict()}, participant: {participant.identity}"
@@ -219,9 +216,9 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         variant: Literal["default", "success", "warning", "destructive"],
     ):
         await ctx.room.local_participant.perform_rpc(
-            participant.identity,
-            "pg.toast",
-            json.dumps(
+            destination_identity=participant.identity,
+            method="pg.toast",
+            payload=json.dumps(
                 {"title": title, "description": description, "variant": variant}
             ),
         )

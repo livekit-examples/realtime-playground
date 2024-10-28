@@ -95,11 +95,11 @@ export function ConfigurationForm() {
     }
 
     try {
-      let response = await localParticipant.performRpc(
-        agent.identity,
-        "pg.updateConfig",
-        JSON.stringify(attributes),
-      );
+      let response = await localParticipant.performRpc({
+        destinationIdentity: agent.identity,
+        method: "pg.updateConfig",
+        payload: JSON.stringify(attributes),
+      });
       let responseObj = JSON.parse(response);
       if (responseObj.changed) {
         toast({

@@ -14,7 +14,7 @@ import type {
   Participant,
   TrackPublication,
 } from "@livekit/rtc-node";
-import { RemoteParticipant, TrackSource } from "@livekit/rtc-node";
+import { RemoteParticipant, TrackSource, type RpcInvocationData } from "@livekit/rtc-node";
 import { fileURLToPath } from "node:url";
 import { v4 as uuidv4 } from "uuid";
 
@@ -102,11 +102,11 @@ function showToast(
   description: string | undefined,
   variant: "success" | "warning" | "destructive" | "default"
 ) {
-  ctx.room.localParticipant?.performRpc(
-    participant.identity,
-    "pg.toast",
-    JSON.stringify({ title, description, variant })
-  );
+  ctx.room.localParticipant?.performRpc({
+    destinationIdentity: participant.identity,
+    method: "pg.toast",
+    payload: JSON.stringify({ title, description, variant })
+  });
 }
 
 async function runMultimodalAgent(
@@ -150,12 +150,9 @@ async function runMultimodalAgent(
   ctx.room.localParticipant?.registerRpcMethod(
     "pg.updateConfig",
     async (
-      requestId: string,
-      callerIdentity: string,
-      payload: string,
-      responseTimeoutMs: number
+      data: RpcInvocationData
     ) => {
-      const newConfig = parseSessionConfig(JSON.parse(payload));
+      const newConfig = parseSessionConfig(JSON.parse(data.payload));
       if (!configEqual(newConfig, lastConfig)) {
         console.log(
           `updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`
