@@ -179,7 +179,7 @@ async function runMultimodalAgent(
     let title: string;
 
     if (response.status === "incomplete") {
-      if (response.statusDetails?.reason) {
+      if (response.statusDetails?.type === "incomplete") {
         const reason = response.statusDetails.reason;
         if (reason === "max_output_tokens") {
           variant = "warning";
@@ -198,8 +198,8 @@ async function runMultimodalAgent(
         title = "Response incomplete";
       }
     } else if (response.status === "failed") {
-      if (response.statusDetails?.error) {
-        const errorCode = response.statusDetails.error.code;
+      if (response.statusDetails?.type === "failed") {
+        const errorCode = response.statusDetails.error?.code;
         if (errorCode === "server_error") {
           variant = "destructive";
           title = "Server error";
