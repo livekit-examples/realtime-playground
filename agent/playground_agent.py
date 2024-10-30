@@ -119,7 +119,7 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         )
         session.response.create()
 
-    @ctx.room.local_participant.rpc_method("pg.updateConfig")
+    @ctx.room.local_participant.register_rpc_method("pg.updateConfig")
     async def update_config(
         data: rtc.rpc.RpcInvocationData,
     ):
