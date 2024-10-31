@@ -172,7 +172,7 @@ async function runMultimodalAgent(
   session.on("response_done", (response: openai.realtime.RealtimeResponse) => {
     let message: string | undefined;
     if (response.status === "incomplete") {
-      if (response.statusDetails?.reason) {
+      if (response.statusDetails?.type === "incomplete") {
         const reason = response.statusDetails.reason;
         switch (reason) {
           case "max_output_tokens":
@@ -189,8 +189,8 @@ async function runMultimodalAgent(
         message = "🚫 Response incomplete";
       }
     } else if (response.status === "failed") {
-      if (response.statusDetails?.error) {
-        switch (response.statusDetails.error.code) {
+      if (response.statusDetails?.type === "failed") {
+        switch (response.statusDetails.error?.code) {
           case "server_error":
             message = `⚠️ Server error`;
             break;
