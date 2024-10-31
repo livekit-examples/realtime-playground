@@ -129,7 +129,7 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         new_config = parse_session_config(json.loads(data.payload))
         if config != new_config:
             logger.info(
-                f"participant attributes changed: {new_config.to_dict()}, participant: {participant.identity}"
+                f"config changed: {new_config.to_dict()}, participant: {participant.identity}"
             )
             session = model.sessions[0]
             session.session_update(
