@@ -14,6 +14,7 @@ import { usePlaygroundState } from "@/hooks/use-playground-state";
 import {
   useConnectionState,
   useLocalParticipant,
+  useVoiceAssistant,
 } from "@livekit/components-react";
 import { ConnectionState } from "livekit-client";
 import { Button } from "@/components/ui/button";
@@ -54,8 +55,9 @@ export function ConfigurationForm() {
   const formValues = form.watch();
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null); // Ref to track timeout
   const { toast } = useToast();
+  const { agent } = useVoiceAssistant();
 
-  const updateConfig = useCallback(() => {
+  const updateConfig = useCallback(async () => {
     const values = pgState.sessionConfig;
     const attributes: { [key: string]: string } = {
       instructions: pgState.instructions,
@@ -87,32 +89,40 @@ export function ConfigurationForm() {
     if (onlyVoiceChanged) {
       return;
     }
-    localParticipant
-      .setAttributes(attributes)
-      .catch((e) => {
-        if (hadExistingAttributes) {
-          toast({
-            title: "Error Updating Configuration",
-            description:
-              "There was an error updating your configuration. Please try again.",
-            variant: "destructive",
-            duration: 5000,
-            className: "bg-red-500 text-white",
-          });
-        }
-      })
-      .then(() => {
-        if (hadExistingAttributes) {
-          toast({
-            title: "Configuration Updated",
-            description: "Your changes have been applied successfully.",
-            variant: "default",
-            duration: 3000,
-            className: "bg-green-500 text-white",
-          });
-        }
+
+    if (!agent?.identity) {
+      return;
+    }
+
+    try {
+      let response = await localParticipant.performRpc({
+        destinationIdentity: agent.identity,
+        method: "pg.updateConfig",
+        payload: JSON.stringify(attributes),
       });
-  }, [pgState.sessionConfig, pgState.instructions, localParticipant, toast]);
+      let responseObj = JSON.parse(response);
+      if (responseObj.changed) {
+        toast({
+          title: "Configuration Updated",
+          description: "Your changes have been applied successfully.",
+          variant: "success",
+        });
+      }
+    } catch (e) {
+      toast({
+        title: "Error Updating Configuration",
+        description:
+          "There was an error updating your configuration. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [
+    pgState.sessionConfig,
+    pgState.instructions,
+    localParticipant,
+    toast,
+    agent,
+  ]);
 
   // Function to debounce updates when user stops interacting
   const handleDebouncedUpdate = useCallback(() => {

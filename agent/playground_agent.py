@@ -5,7 +5,7 @@ import json
 import logging
 import uuid
 from dataclasses import asdict, dataclass
-from typing import Any, Dict
+from typing import Any, Dict, Literal
 
 from livekit import rtc
 from livekit.agents import (
@@ -48,6 +48,9 @@ class SessionConfig:
         }
         return modalities_map.get(modalities, ["text", "audio"])
 
+    def __eq__(self, other: SessionConfig) -> bool:
+        return self.to_dict() == other.to_dict()
+
 
 def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
     turn_detection = None
@@ -67,7 +70,9 @@ def parse_session_config(data: Dict[str, Any]) -> SessionConfig:
         instructions=data.get("instructions", ""),
         voice=data.get("voice", "alloy"),
         temperature=float(data.get("temperature", 0.8)),
-        max_response_output_tokens=data.get("max_output_tokens") if data.get("max_output_tokens") == 'inf' else int(data.get("max_output_tokens") or 2048),
+        max_response_output_tokens=data.get("max_output_tokens")
+        if data.get("max_output_tokens") == "inf"
+        else int(data.get("max_output_tokens") or 2048),
         modalities=SessionConfig._modalities_from_string(
             data.get("modalities", "text_and_audio")
         ),
@@ -114,26 +119,72 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         )
         session.response.create()
 
-    @ctx.room.on("participant_attributes_changed")
-    def on_attributes_changed(
-        changed_attributes: dict[str, str], changed_participant: rtc.Participant
+    @ctx.room.local_participant.register_rpc_method("pg.updateConfig")
+    async def update_config(
+        data: rtc.rpc.RpcInvocationData,
     ):
-        if changed_participant != participant:
+        if data.caller_identity != participant.identity:
             return
 
-        new_config = parse_session_config(
-            {**participant.attributes, **changed_attributes}
-        )
-        logger.info(f"participant attributes changed: {new_config.to_dict()}, participant: {changed_participant.identity}")
-        session = model.sessions[0]
-        session.session_update(
-            instructions=new_config.instructions,
-            voice=new_config.voice,
-            temperature=new_config.temperature,
-            max_response_output_tokens=new_config.max_response_output_tokens,
-            turn_detection=new_config.turn_detection,
-            modalities=new_config.modalities,
-        )
+        new_config = parse_session_config(json.loads(data.payload))
+        if config != new_config:
+            logger.info(
+                f"config changed: {new_config.to_dict()}, participant: {participant.identity}"
+            )
+            session = model.sessions[0]
+            session.session_update(
+                instructions=new_config.instructions,
+                voice=new_config.voice,
+                temperature=new_config.temperature,
+                max_response_output_tokens=new_config.max_response_output_tokens,
+                turn_detection=new_config.turn_detection,
+                modalities=new_config.modalities,
+            )
+            return json.dumps({"changed": True})
+        else:
+            return json.dumps({"changed": False})
+
+    @session.on("response_done")
+    def on_response_done(response: openai.realtime.RealtimeResponse):
+        variant: Literal["warning", "destructive"]
+        description: str | None = None
+        title: str
+        if response.status == "incomplete":
+            if response.status_details and response.status_details["reason"]:
+                reason = response.status_details["reason"]
+                if reason == "max_output_tokens":
+                    variant = "warning"
+                    title = "Max output tokens reached"
+                    description = "Response may be incomplete"
+                elif reason == "content_filter":
+                    variant = "warning"
+                    title = "Content filter applied"
+                    description = "Response may be incomplete"
+                else:
+                    variant = "warning"
+                    title = "Response incomplete"
+            else:
+                variant = "warning"
+                title = "Response incomplete"
+        elif response.status == "failed":
+            if response.status_details and response.status_details["error"]:
+                error_code = response.status_details["error"]["code"]
+                if error_code == "server_error":
+                    variant = "destructive"
+                    title = "Server error"
+                elif error_code == "rate_limit_exceeded":
+                    variant = "destructive"
+                    title = "Rate limit exceeded"
+                else:
+                    variant = "destructive"
+                    title = "Response failed"
+            else:
+                variant = "destructive"
+                title = "Response failed"
+        else:
+            return
+
+        asyncio.create_task(show_toast(title, description, variant))
 
     async def send_transcription(
         ctx: JobContext,
@@ -159,48 +210,17 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
         )
         await ctx.room.local_participant.publish_transcription(transcription)
 
-    @session.on("response_done")
-    def on_response_done(response: openai.realtime.RealtimeResponse):
-        message = None
-        if response.status == "incomplete":
-            if response.status_details and response.status_details['reason']:
-                reason = response.status_details['reason']
-                if reason == "max_output_tokens":
-                    message = "🚫 Max output tokens reached"
-                elif reason == "content_filter":
-                    message = "🚫 Content filter applied"
-                else:
-                    message = f"🚫 Response incomplete: {reason}"
-            else:
-                message = "🚫 Response incomplete"
-        elif response.status == "failed":
-            if response.status_details and response.status_details['error']:
-                error_code = response.status_details['error']['code']
-                if error_code == "server_error":
-                    message = "⚠️ Server error"
-                elif error_code == "rate_limit_exceeded":
-                    message = "⚠️ Rate limit exceeded"
-                else:
-                    message = "⚠️ Response failed"
-            else:
-                message = "⚠️ Response failed"
-        else:
-            return
-
-        local_participant = ctx.room.local_participant
-        track_sid = next(
-            (
-                track.sid
-                for track in local_participant.track_publications.values()
-                if track.source == rtc.TrackSource.SOURCE_MICROPHONE
+    async def show_toast(
+        title: str,
+        description: str | None,
+        variant: Literal["default", "success", "warning", "destructive"],
+    ):
+        await ctx.room.local_participant.perform_rpc(
+            destination_identity=participant.identity,
+            method="pg.toast",
+            payload=json.dumps(
+                {"title": title, "description": description, "variant": variant}
             ),
-            None,
-        )
-
-        asyncio.create_task(
-            send_transcription(
-                ctx, local_participant, track_sid, "status-" + str(uuid.uuid4()), message
-            )
         )
 
     last_transcript_id = None

@@ -9,14 +9,9 @@ import {
   multimodal,
 } from "@livekit/agents";
 import * as openai from "@livekit/agents-plugin-openai";
-import type {
-  LocalParticipant,
-  Participant,
-  TrackPublication,
-} from "@livekit/rtc-node";
-import { RemoteParticipant, TrackSource } from "@livekit/rtc-node";
+import type { Participant } from "@livekit/rtc-node";
+import { RemoteParticipant, type RpcInvocationData } from "@livekit/rtc-node";
 import { fileURLToPath } from "node:url";
-import { v4 as uuidv4 } from "uuid";
 
 function safeLogConfig(config: SessionConfig): string {
   const safeConfig = { ...config, openaiApiKey: "[REDACTED]" };
@@ -50,6 +45,7 @@ interface SessionConfig {
   turnDetection: TurnDetectionType;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseSessionConfig(data: any): SessionConfig {
   return {
     openaiApiKey: data.openai_api_key || "",
@@ -65,6 +61,25 @@ function parseSessionConfig(data: any): SessionConfig {
   };
 }
 
+function configEqual(obj1: SessionConfig, obj2: SessionConfig): boolean {
+  if (obj1 === obj2) return true;
+  if (
+    typeof obj1 !== "object" ||
+    obj1 === null ||
+    typeof obj2 !== "object" ||
+    obj2 === null
+  )
+    return false;
+  const keys1 = Object.keys(obj1) as (keyof SessionConfig)[];
+  const keys2 = Object.keys(obj2) as (keyof SessionConfig)[];
+  if (keys1.length !== keys2.length) return false;
+  for (const key of keys1) {
+    if (key === "openaiApiKey") continue;
+    if (!keys2.includes(key) || obj1[key] !== obj2[key]) return false;
+  }
+  return true;
+}
+
 function modalitiesFromString(
   modalities: string,
 ): ["text", "audio"] | ["text"] {
@@ -75,10 +90,18 @@ function modalitiesFromString(
   return modalitiesMap[modalities] || ["text", "audio"];
 }
 
-function getMicrophoneTrackSid(participant: Participant): string | undefined {
-  return Array.from(participant.trackPublications.values()).find(
-    (track: TrackPublication) => track.source === TrackSource.SOURCE_MICROPHONE,
-  )?.sid;
+async function showToast(
+  ctx: JobContext,
+  participant: Participant,
+  title: string,
+  description: string | undefined,
+  variant: "success" | "warning" | "destructive" | "default",
+) {
+  await ctx.room.localParticipant?.performRpc({
+    destinationIdentity: participant.identity,
+    method: "pg.toast",
+    payload: JSON.stringify({ title, description, variant }),
+  });
 }
 
 async function runMultimodalAgent(
@@ -87,6 +110,7 @@ async function runMultimodalAgent(
 ) {
   const metadata = JSON.parse(participant.metadata);
   const config = parseSessionConfig(metadata);
+  let lastConfig = config;
   console.log(
     `starting multimodal agent with config: ${safeLogConfig(config)}`,
   );
@@ -118,108 +142,78 @@ async function runMultimodalAgent(
   });
   session.response.create();
 
-  ctx.room.on(
-    "participantAttributesChanged",
-    (
-      changedAttributes: Record<string, string>,
-      changedParticipant: Participant,
-    ) => {
-      if (changedParticipant !== participant) {
-        return;
-      }
-      const newConfig = parseSessionConfig({
-        ...changedParticipant.attributes,
-        ...changedAttributes,
-      });
+  ctx.room.localParticipant?.registerRpcMethod(
+    "pg.updateConfig",
+    async (data: RpcInvocationData) => {
+      const newConfig = parseSessionConfig(JSON.parse(data.payload));
+      if (!configEqual(newConfig, lastConfig)) {
+        console.log(
+          `updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`,
+        );
+        lastConfig = newConfig;
+        session.sessionUpdate({
+          instructions: newConfig.instructions,
+          temperature: newConfig.temperature,
+          maxResponseOutputTokens: newConfig.maxOutputTokens,
+          modalities: newConfig.modalities as ["text", "audio"] | ["text"],
+          turnDetection: newConfig.turnDetection,
+        });
 
-      session.sessionUpdate({
-        instructions: newConfig.instructions,
-        temperature: newConfig.temperature,
-        maxResponseOutputTokens: newConfig.maxOutputTokens,
-        modalities: newConfig.modalities as ["text", "audio"] | ["text"],
-        turnDetection: newConfig.turnDetection,
-      });
+        return JSON.stringify({ changed: true });
+      } else {
+        return JSON.stringify({ changed: false });
+      }
     },
   );
 
-  async function sendTranscription(
-    ctx: JobContext,
-    participant: Participant,
-    trackSid: string,
-    segmentId: string,
-    text: string,
-    isFinal: boolean = true,
-  ) {
-    const transcription = {
-      participantIdentity: participant.identity,
-      trackSid: trackSid,
-      segments: [
-        {
-          id: segmentId,
-          text: text,
-          startTime: BigInt(0),
-          endTime: BigInt(0),
-          language: "",
-          final: isFinal,
-        },
-      ],
-    };
-    await (ctx.room.localParticipant as LocalParticipant).publishTranscription(
-      transcription,
-    );
-  }
-
   session.on("response_done", (response: openai.realtime.RealtimeResponse) => {
-    let message: string | undefined;
+    let variant: "warning" | "destructive" | "success";
+    let description: string | undefined = undefined;
+    let title: string;
+
     if (response.status === "incomplete") {
-      if (response.statusDetails?.reason) {
+      if (response.statusDetails?.type === "incomplete") {
         const reason = response.statusDetails.reason;
-        switch (reason) {
-          case "max_output_tokens":
-            message = "🚫 Max output tokens reached";
-            break;
-          case "content_filter":
-            message = "🚫 Content filter applied";
-            break;
-          default:
-            message = `🚫 Response incomplete: ${reason}`;
-            break;
+        if (reason === "max_output_tokens") {
+          variant = "warning";
+          title = "Max output tokens reached";
+          description = "Response may be incomplete";
+        } else if (reason === "content_filter") {
+          variant = "warning";
+          title = "Content filter applied";
+          description = "Response may be incomplete";
+        } else {
+          variant = "warning";
+          title = "Response incomplete";
         }
       } else {
-        message = "🚫 Response incomplete";
+        variant = "warning";
+        title = "Response incomplete";
       }
     } else if (response.status === "failed") {
-      if (response.statusDetails?.error) {
-        switch (response.statusDetails.error.code) {
-          case "server_error":
-            message = `⚠️ Server error`;
-            break;
-          case "rate_limit_exceeded":
-            message = `⚠️ Rate limit exceeded`;
-            break;
-          default:
-            message = `⚠️ Response failed`;
-            break;
+      if (response.statusDetails?.type === "failed") {
+        const errorCode = response.statusDetails.error?.code;
+        if (errorCode === "server_error") {
+          variant = "destructive";
+          title = "Server error";
+        } else if (errorCode === "rate_limit_exceeded") {
+          variant = "destructive";
+          title = "Rate limit exceeded";
+        } else {
+          variant = "destructive";
+          title = "Response failed";
         }
       } else {
-        message = "⚠️ Response failed";
+        variant = "destructive";
+        title = "Response failed";
       }
     } else {
       return;
     }
 
-    const localParticipant = ctx.room.localParticipant as LocalParticipant;
-    const trackSid = getMicrophoneTrackSid(localParticipant);
-
-    if (trackSid) {
-      sendTranscription(
-        ctx,
-        localParticipant,
-        trackSid,
-        "status-" + uuidv4(),
-        message,
-      );
-    }
+    (async () => {
+      await showToast(ctx, participant, title, description, variant);
+    })();
   });
 }
 

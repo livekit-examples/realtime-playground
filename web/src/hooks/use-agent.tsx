@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import {
   useMaybeRoomContext,
   useVoiceAssistant,
+  useLocalParticipant,
 } from "@livekit/components-react";
 import {
   RoomEvent,
@@ -9,9 +10,10 @@ import {
   Participant,
   TrackPublication,
   RemoteParticipant,
+  type RpcInvocationData,
 } from "livekit-client";
 import { useConnection } from "@/hooks/use-connection";
-
+import { useToast } from "@/hooks/use-toast";
 interface Transcription {
   segment: TranscriptionSegment;
   participant?: Participant;
@@ -29,12 +31,14 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
   const room = useMaybeRoomContext();
   const { shouldConnect } = useConnection();
   const { agent } = useVoiceAssistant();
+  const { localParticipant } = useLocalParticipant();
   const [rawSegments, setRawSegments] = useState<{
     [id: string]: Transcription;
   }>({});
   const [displayTranscriptions, setDisplayTranscriptions] = useState<
     Transcription[]
   >([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (!room) {
@@ -59,6 +63,24 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
       room.off(RoomEvent.TranscriptionReceived, updateRawSegments);
     };
   }, [room]);
+
+  useEffect(() => {
+    if (localParticipant) {
+      localParticipant.registerRpcMethod(
+        "pg.toast",
+        async (data: RpcInvocationData) => {
+          const { title, description, variant } = JSON.parse(data.payload);
+          console.log(title, description, variant);
+          toast({
+            title,
+            description,
+            variant,
+          });
+          return JSON.stringify({ shown: true });
+        },
+      );
+    }
+  }, [localParticipant, toast]);
 
   useEffect(() => {
     const sorted = Object.values(rawSegments).sort(
