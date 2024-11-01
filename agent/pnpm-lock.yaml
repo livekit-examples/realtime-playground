@@ -4,19 +4,19 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@livekit/rtc-node': ^0.11.0
+
 importers:
 
   .:
     dependencies:
       '@livekit/agents':
-        specifier: ^0.3.2
-        version: 0.3.2
+        specifier: ^0.3.4
+        version: 0.3.4
       '@livekit/agents-plugin-openai':
-        specifier: ^0.3.2
-        version: 0.3.2
-      '@livekit/rtc-node':
-        specifier: file:../../../livekit/node-sdks/packages/livekit-rtc
-        version: file:../../../livekit/node-sdks/packages/livekit-rtc
+        specifier: ^0.3.4
+        version: 0.3.4
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -38,30 +38,30 @@ importers:
     devDependencies:
       '@types/node':
         specifier: ^22.7.5
-        version: 22.7.5
+        version: 22.8.6
       '@types/uuid':
         specifier: ^10.0.0
         version: 10.0.0
       typescript:
         specifier: ^5.0.0
-        version: 5.6.2
+        version: 5.6.3
 
 packages:
 
   '@bufbuild/protobuf@1.10.0':
     resolution: {integrity: sha512-QDdVFLoN93Zjg36NoQPZfsVH9tZew7wKDKyV5qRdj8ntT4wQCOradQjRaTdwMhWUYsgKsvCINKKm87FdEk96Ag==}
 
-  '@bufbuild/protobuf@2.2.0':
-    resolution: {integrity: sha512-+imAQkHf7U/Rwvu0wk1XWgsP3WnpCWmK7B48f0XqSNzgk64+grljTKC7pnO/xBiEMUziF7vKRfbBnOQhg126qQ==}
+  '@bufbuild/protobuf@2.2.1':
+    resolution: {integrity: sha512-gdWzq7eX017a1kZCU/bP/sbk4e0GZ6idjsXOcMrQwODCb/rx985fHJJ8+hCu79KpuG7PfZh7bo3BBjPH37JuZw==}
 
-  '@eslint-community/eslint-utils@4.4.0':
-    resolution: {integrity: sha512-1/sA4dwrzBAyeUoQ6oxahHKmrZvsnLCg4RfxW3ZFGGmQkSNQPFNLV9CUEFQP1x9EYXHTo5p6xdhZM1Ne9p/AfA==}
+  '@eslint-community/eslint-utils@4.4.1':
+    resolution: {integrity: sha512-s3O3waFUrMV8P/XaF/+ZTp1X9XBZW1a4B97ZnjQF2KYWaFD2A8KyFBsrsfSjEmjn3RGWAIuvlneuZm3CUK3jbA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
       eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
 
-  '@eslint-community/regexpp@4.11.1':
-    resolution: {integrity: sha512-m4DVN9ZqskZoLU5GlWZadwDnYo3vAEydiUayB9widCl9ffWx2IvPnp6n3on5rJmziJSw9Bv+Z3ChDVdMwXCY8Q==}
+  '@eslint-community/regexpp@4.12.1':
+    resolution: {integrity: sha512-CCZCDJuduB9OUkFkY2IgppNZMi2lBQgD2qzwXkEia16cge2pijY/aXi96CJMquDMn3nJdlPV1A5KrJEXwfLNzQ==}
     engines: {node: ^12.0.0 || ^14.0.0 || >=16.0.0}
 
   '@eslint/eslintrc@2.1.4':
@@ -85,54 +85,50 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@livekit/agents-plugin-openai@0.3.2':
-    resolution: {integrity: sha512-Dpu08vbeWpL8hiIbfYRne/ob/I5QX98sOa1PV0MgeF93K73cTg+W64PUeopBiUGtYiQNIz4tJ3QbiSvakkXAmA==}
+  '@livekit/agents-plugin-openai@0.3.4':
+    resolution: {integrity: sha512-zODOW2Iwv6TcgsNKTU25CXj4+Y3KPUEOS2pOOl3gP5C5C10RTLZdAl1HKoKWoaGTby27RgvOfsUGu4e3p2yPtA==}
 
-  '@livekit/agents@0.3.2':
-    resolution: {integrity: sha512-ViMduU3ClF4szSGIaVzqfW44701tiEzI0wx8Li4o0mJYnD8KBgfAgvxa9CYrIGPcC/OayLzYdoY5uQguDduC6Q==}
+  '@livekit/agents@0.3.4':
+    resolution: {integrity: sha512-OdB49oTY97ltZeBWEsQmxvxNlxw09lF6wZWgqed4HpnA0c0FxADpHK6tgexMXFgQWiaT4pdJXxBX15Bd/9IHrg==}
 
   '@livekit/mutex@1.0.0':
     resolution: {integrity: sha512-aiUhoThBNF9UyGTxEURFzJLhhPLIVTnQiEVMjRhPnfHNKLfo2JY9xovHKIus7B78UD5hsP6DlgpmAsjrz4U0Iw==}
 
-  '@livekit/protocol@1.23.0':
-    resolution: {integrity: sha512-Hh83moW437mWhiyRgoDMedJ/s/rCTfe3ACSaIJ3n2NlVaq/+BTuB/yH7a6alM1NEkGBSmgrEHxabDfozVUlgYg==}
+  '@livekit/protocol@1.27.1':
+    resolution: {integrity: sha512-ISEp7uWdV82mtCR1eyHFTzdRZTVbe2+ZztjmjiMPzR/KPrI1Ma/u5kLh87NNuY3Rn8wv1VlEvGHHsFjQ+dKVUw==}
 
-  '@livekit/rtc-node-darwin-arm64@0.9.1':
-    resolution: {integrity: sha512-hH61Ux1JyYrYMIMIUhJuP6g5DW5vLs1Yfvd5aa5DxmsxiwdvE+hSaTbCUmUDOWDD+WHnSu60sikz7tEDshAmCw==}
+  '@livekit/rtc-node-darwin-arm64@0.11.0':
+    resolution: {integrity: sha512-ZepFYFO984NnkM6h29KvGagGpQ7/Q/7WdtVr68rhque8YyP/SLPfW1AA73jSn7+FwIVQiaUUERtrOlSlEWe8hg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@livekit/rtc-node-darwin-x64@0.9.1':
-    resolution: {integrity: sha512-dkEuZXWZHTv5Lzd/i1rFx7wjdPq+0iw6c783KMq5ktWA0DweBq2FRry22yYEUOX6Kuvwj9A8h0xWuQcfILUHeQ==}
+  '@livekit/rtc-node-darwin-x64@0.11.0':
+    resolution: {integrity: sha512-JsqwV6XVDFYFUV67QZ3CFxD3OeK6+eZZzWuDjR7ELam5cDyqYjqi2bWEVDPnv+4zA+w6Xx9g7IPRDzkMdA60kg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
 
-  '@livekit/rtc-node-linux-arm64-gnu@0.9.1':
-    resolution: {integrity: sha512-/XhMNdQjryERYRHykXoCA1JAuGtk6D4ST7Hs+UE1PrqKW+w4FEEYqYNZ5iunFfCZRt4GVGotbgNQhqR6AM6vtg==}
+  '@livekit/rtc-node-linux-arm64-gnu@0.11.0':
+    resolution: {integrity: sha512-3d1WtyMKhQwLbiZQuw6MnpazPq2nOSChFiePoIuZhcrDyZrN5Tte/QBkIL8G+dCXwyD1jfknTL4D0FeI+GRMww==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
 
-  '@livekit/rtc-node-linux-x64-gnu@0.9.1':
-    resolution: {integrity: sha512-vge/MZF1qfLPrtzy+XHCBFKNx5vH+u8AMPi4mkj4rQJNZIizTCQJ8qjx8g7GXy7mhxHKFYWEe/TkOD3M9Ab4Wg==}
+  '@livekit/rtc-node-linux-x64-gnu@0.11.0':
+    resolution: {integrity: sha512-iwi1FpnJgI0JNq1pNe6jgqIXa16bujBQPhEF0ul47uyp7bOnSpVzVAnbAdkrACnaalB106YWZ6cc1L37gACYPg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
 
-  '@livekit/rtc-node-win32-x64-msvc@0.9.1':
-    resolution: {integrity: sha512-tYpAhkcWwGlhH/S8NX2Ok9L4mx/GNSy7GDk4e9jeZbK5xxK8v2dq0Qj5SS3SE6c0PfHRuCH2nNqs0S3OVEol3A==}
+  '@livekit/rtc-node-win32-x64-msvc@0.11.0':
+    resolution: {integrity: sha512-tLrdolxU+0PBxssIrSFNJie5XaCi1X/GN6GIbp/ZnSOZ+nwaNxFBmYolGjxRuW7ks1HGR7z/zIIpJey5CnFkWg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
 
-  '@livekit/rtc-node@0.9.1':
-    resolution: {integrity: sha512-2kNxT3JNzjKWW7i0Q7o/JH9gB9ZFIcllbYFduGm97gzkQJcVKnhqyjd6Y7/RxGZTq0wh3lNR6D+FdDGnKOqjpA==}
-    engines: {node: '>= 18'}
-
-  '@livekit/rtc-node@file:../../../livekit/node-sdks/packages/livekit-rtc':
-    resolution: {directory: ../../../livekit/node-sdks/packages/livekit-rtc, type: directory}
+  '@livekit/rtc-node@0.11.0':
+    resolution: {integrity: sha512-HRnoGsNJC+okhzV9IlljaWskOYIGi1xLD9NzwJwRkzYRdPFwEMf5QU5bmELNCfwDw8bMOpMQB4M8wIkVhCrcxg==}
     engines: {node: '>= 18'}
 
   '@livekit/typed-emitter@3.0.0':
@@ -154,8 +150,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@types/node@22.7.5':
-    resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
+  '@types/node@22.8.6':
+    resolution: {integrity: sha512-tosuJYKrIqjQIlVCM4PEGxOmyg3FCPa/fViuJChnGeEIhjA46oy8FMVoF9su1/v8PNs2a8Q0iFNyOx0uOF91nw==}
 
   '@types/uuid@10.0.0':
     resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
@@ -172,8 +168,8 @@ packages:
     peerDependencies:
       acorn: ^6.0.0 || ^7.0.0 || ^8.0.0
 
-  acorn@8.12.1:
-    resolution: {integrity: sha512-tcpGyI9zbizT9JbV6oYE477V6mTlXvvi0T0G3SNIYE2apm/G5huBa1+K89VGeovbg+jycCrfhl3ADxErOuO6Jg==}
+  acorn@8.14.0:
+    resolution: {integrity: sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==}
     engines: {node: '>=0.4.0'}
     hasBin: true
 
@@ -315,6 +311,7 @@ packages:
   eslint@8.57.1:
     resolution: {integrity: sha512-ypowyDxpVSYpkXr9WPv2PAZCtNip1Mv5KTW0SCurXv/9iOpcrH9PaqUElksqEB6pChqHGDRCFTyrZlGhnLNGiA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -447,8 +444,8 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  jose@5.9.3:
-    resolution: {integrity: sha512-egLIoYSpcd+QUF+UHgobt5YzI2Pkw/H39ou9suW687MY6PmCwPmkNV/4TNjn1p2tX5xO3j0d0sq5hiYE24bSlg==}
+  jose@5.9.6:
+    resolution: {integrity: sha512-AMlnetc9+CV9asI19zHmrgS/WYsWUwCn2R7RzlbJWD7F9eWYUTGyBmU9o6PxngtLGOiDGPRu+Uc4fhKzbpteZQ==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -474,8 +471,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  livekit-server-sdk@2.6.2:
-    resolution: {integrity: sha512-3fFzHu7sAynUaUFTCKtRP9lgQCU0Qe/x7XA99GpT1ro7fTy1ZVzaWq34WcXEyUGBBMFxG19LlSIAQBcGZVStWQ==}
+  livekit-server-sdk@2.7.3:
+    resolution: {integrity: sha512-dBiyMJ2o3Adw7aBVuFxVOlYHmiZtGGS9zVksMuv/wiEVHY+6XSDzo0X67pZVkyGlq1moF4YZAReVY2Dbxve8NQ==}
     engines: {node: '>=19'}
 
   locate-path@6.0.0:
@@ -539,8 +536,11 @@ packages:
   pino-abstract-transport@1.2.0:
     resolution: {integrity: sha512-Guhh8EZfPCfH+PMXAb6rKOjGQEoy0xlAIn+irODG5kgfYV+BQ0rGYYWTIel3P5mmyXqkYkPmdIkywsn6QKUR1Q==}
 
-  pino-pretty@11.2.2:
-    resolution: {integrity: sha512-2FnyGir8nAJAqD3srROdrF1J5BIcMT4nwj7hHSc60El6Uxlym00UbCCd8pYIterstVBFlMyF1yFV8XdGIPbj4A==}
+  pino-abstract-transport@2.0.0:
+    resolution: {integrity: sha512-F63x5tizV6WCh4R6RHyi2Ml+M70DNRXt/+HANowMflpgGFMAym/VKm6G7ZOQRjqN7XbGxK1Lg9t6ZrtzOaivMw==}
+
+  pino-pretty@11.3.0:
+    resolution: {integrity: sha512-oXwn7ICywaZPHmu3epHGU2oJX4nPmKvHvB/bwrJHlGcbEWaVcotkpyVHMKLKmiVryWYByNp0jpgAcXpFJDXJzA==}
     hasBin: true
 
   pino-std-serializers@6.2.2:
@@ -632,8 +632,8 @@ packages:
   sonic-boom@3.8.1:
     resolution: {integrity: sha512-y4Z8LCDBuum+PBP3lSV7RHrXscqksve/bi0as7mhwVnBW+/wUqKT/2Kb7um8yqcFy0duYbbPxzt89Zy2nOCaxg==}
 
-  sonic-boom@4.1.0:
-    resolution: {integrity: sha512-NGipjjRicyJJ03rPiZCJYjwlsuP2d1/5QUviozRXC7S3WdVWNK5e3Ojieb9CCyfhq2UC+3+SRd9nG3I2lPRvUw==}
+  sonic-boom@4.2.0:
+    resolution: {integrity: sha512-INb7TM37/mAcsGmc9hyyI6+QR3rR1zVRu36B0NeGXKnOOLiZOfER5SA+N7X7k3yUYRzLWafduTDvJAfDswwEww==}
 
   split2@4.2.0:
     resolution: {integrity: sha512-UcjcJOWknrNkF6PLX83qcHM6KHgVKNkV62Y8a5uYDVv9ydGQVwAHMKqHdJje1VTWpljG0WYpCDhrCdAOYH4TWg==}
@@ -654,8 +654,8 @@ packages:
     resolution: {integrity: sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==}
     engines: {node: '>=8'}
 
-  synckit@0.9.1:
-    resolution: {integrity: sha512-7gr8p9TQP6RAHusBOSLs46F4564ZrjV8xFmw5zCmgmhGUcw2hxsShhJ6CEiHQMgPDwAQ1fWHPM0ypc4RMAig4A==}
+  synckit@0.9.2:
+    resolution: {integrity: sha512-vrozgXDQwYO72vHjUb/HnFbQx1exDjoKzqx23aXEg2a9VIg2TSFZ8FmeZpTjUCFMYw7mpX4BE2SFu8wI7asYsw==}
     engines: {node: ^14.18.0 || >=16.0.0}
 
   text-table@0.2.0:
@@ -664,8 +664,8 @@ packages:
   thread-stream@2.7.0:
     resolution: {integrity: sha512-qQiRWsU/wvNolI6tbbCKd9iKaTnCXsTwVxhhKM6nctPdujTyztjlbUkUTUymidWcMnZ5pWR0ej4a0tjsW021vw==}
 
-  tslib@2.7.0:
-    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -679,8 +679,8 @@ packages:
     resolution: {integrity: sha512-yOGpmOAL7CkKe/91I5O3gPICmJNLJ1G4zFYVAsRHg7M64biSnPtRj0WNQt++bRkjYOqjWXrhnUw1utzmVErAdg==}
     engines: {node: '>=16'}
 
-  typescript@5.6.2:
-    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
+  typescript@5.6.3:
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -729,14 +729,14 @@ snapshots:
 
   '@bufbuild/protobuf@1.10.0': {}
 
-  '@bufbuild/protobuf@2.2.0': {}
+  '@bufbuild/protobuf@2.2.1': {}
 
-  '@eslint-community/eslint-utils@4.4.0(eslint@8.57.1)':
+  '@eslint-community/eslint-utils@4.4.1(eslint@8.57.1)':
     dependencies:
       eslint: 8.57.1
       eslint-visitor-keys: 3.4.3
 
-  '@eslint-community/regexpp@4.11.1': {}
+  '@eslint-community/regexpp@4.12.1': {}
 
   '@eslint/eslintrc@2.1.4':
     dependencies:
@@ -766,23 +766,24 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@livekit/agents-plugin-openai@0.3.2':
+  '@livekit/agents-plugin-openai@0.3.4':
     dependencies:
-      '@livekit/agents': 0.3.2
-      '@livekit/rtc-node': 0.9.1
+      '@livekit/agents': 0.3.4
+      '@livekit/rtc-node': 0.11.0
       ws: 8.18.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@livekit/agents@0.3.2':
+  '@livekit/agents@0.3.4':
     dependencies:
-      '@livekit/protocol': 1.23.0
-      '@livekit/rtc-node': 0.9.1
+      '@livekit/mutex': 1.0.0
+      '@livekit/protocol': 1.27.1
+      '@livekit/rtc-node': 0.11.0
       commander: 12.1.0
-      livekit-server-sdk: 2.6.2
+      livekit-server-sdk: 2.7.3
       pino: 8.21.0
-      pino-pretty: 11.2.2
+      pino-pretty: 11.3.0
       ws: 8.18.0
       zod: 3.23.8
     transitivePeerDependencies:
@@ -791,41 +792,36 @@ snapshots:
 
   '@livekit/mutex@1.0.0': {}
 
-  '@livekit/protocol@1.23.0':
+  '@livekit/protocol@1.27.1':
     dependencies:
       '@bufbuild/protobuf': 1.10.0
 
-  '@livekit/rtc-node-darwin-arm64@0.9.1':
+  '@livekit/rtc-node-darwin-arm64@0.11.0':
     optional: true
 
-  '@livekit/rtc-node-darwin-x64@0.9.1':
+  '@livekit/rtc-node-darwin-x64@0.11.0':
     optional: true
 
-  '@livekit/rtc-node-linux-arm64-gnu@0.9.1':
+  '@livekit/rtc-node-linux-arm64-gnu@0.11.0':
     optional: true
 
-  '@livekit/rtc-node-linux-x64-gnu@0.9.1':
+  '@livekit/rtc-node-linux-x64-gnu@0.11.0':
     optional: true
 
-  '@livekit/rtc-node-win32-x64-msvc@0.9.1':
+  '@livekit/rtc-node-win32-x64-msvc@0.11.0':
     optional: true
 
-  '@livekit/rtc-node@0.9.1':
+  '@livekit/rtc-node@0.11.0':
     dependencies:
-      '@bufbuild/protobuf': 1.10.0
-      '@livekit/typed-emitter': 3.0.0
-    optionalDependencies:
-      '@livekit/rtc-node-darwin-arm64': 0.9.1
-      '@livekit/rtc-node-darwin-x64': 0.9.1
-      '@livekit/rtc-node-linux-arm64-gnu': 0.9.1
-      '@livekit/rtc-node-linux-x64-gnu': 0.9.1
-      '@livekit/rtc-node-win32-x64-msvc': 0.9.1
-
-  '@livekit/rtc-node@file:../../../livekit/node-sdks/packages/livekit-rtc':
-    dependencies:
-      '@bufbuild/protobuf': 2.2.0
+      '@bufbuild/protobuf': 2.2.1
       '@livekit/mutex': 1.0.0
       '@livekit/typed-emitter': 3.0.0
+    optionalDependencies:
+      '@livekit/rtc-node-darwin-arm64': 0.11.0
+      '@livekit/rtc-node-darwin-x64': 0.11.0
+      '@livekit/rtc-node-linux-arm64-gnu': 0.11.0
+      '@livekit/rtc-node-linux-x64-gnu': 0.11.0
+      '@livekit/rtc-node-win32-x64-msvc': 0.11.0
 
   '@livekit/typed-emitter@3.0.0': {}
 
@@ -843,7 +839,7 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@types/node@22.7.5':
+  '@types/node@22.8.6':
     dependencies:
       undici-types: 6.19.8
 
@@ -855,11 +851,11 @@ snapshots:
     dependencies:
       event-target-shim: 5.0.1
 
-  acorn-jsx@5.3.2(acorn@8.12.1):
+  acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
-      acorn: 8.12.1
+      acorn: 8.14.0
 
-  acorn@8.12.1: {}
+  acorn@8.14.0: {}
 
   ajv@6.12.6:
     dependencies:
@@ -953,7 +949,7 @@ snapshots:
       eslint: 8.57.1
       prettier: 3.3.3
       prettier-linter-helpers: 1.0.0
-      synckit: 0.9.1
+      synckit: 0.9.2
     optionalDependencies:
       eslint-config-prettier: 8.10.0(eslint@8.57.1)
 
@@ -973,8 +969,8 @@ snapshots:
 
   eslint@8.57.1:
     dependencies:
-      '@eslint-community/eslint-utils': 4.4.0(eslint@8.57.1)
-      '@eslint-community/regexpp': 4.11.1
+      '@eslint-community/eslint-utils': 4.4.1(eslint@8.57.1)
+      '@eslint-community/regexpp': 4.12.1
       '@eslint/eslintrc': 2.1.4
       '@eslint/js': 8.57.1
       '@humanwhocodes/config-array': 0.13.0
@@ -1016,8 +1012,8 @@ snapshots:
 
   espree@9.6.1:
     dependencies:
-      acorn: 8.12.1
-      acorn-jsx: 5.3.2(acorn@8.12.1)
+      acorn: 8.14.0
+      acorn-jsx: 5.3.2(acorn@8.14.0)
       eslint-visitor-keys: 3.4.3
 
   esquery@1.6.0:
@@ -1124,7 +1120,7 @@ snapshots:
 
   isexe@2.0.0: {}
 
-  jose@5.9.3: {}
+  jose@5.9.6: {}
 
   joycon@3.1.1: {}
 
@@ -1147,11 +1143,11 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  livekit-server-sdk@2.6.2:
+  livekit-server-sdk@2.7.3:
     dependencies:
-      '@livekit/protocol': 1.23.0
+      '@livekit/protocol': 1.27.1
       camelcase-keys: 9.1.3
-      jose: 5.9.3
+      jose: 5.9.6
 
   locate-path@6.0.0:
     dependencies:
@@ -1209,7 +1205,11 @@ snapshots:
       readable-stream: 4.5.2
       split2: 4.2.0
 
-  pino-pretty@11.2.2:
+  pino-abstract-transport@2.0.0:
+    dependencies:
+      split2: 4.2.0
+
+  pino-pretty@11.3.0:
     dependencies:
       colorette: 2.0.20
       dateformat: 4.6.3
@@ -1219,11 +1219,11 @@ snapshots:
       joycon: 3.1.1
       minimist: 1.2.8
       on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 1.2.0
+      pino-abstract-transport: 2.0.0
       pump: 3.0.2
       readable-stream: 4.5.2
       secure-json-parse: 2.7.0
-      sonic-boom: 4.1.0
+      sonic-boom: 4.2.0
       strip-json-comments: 3.1.1
 
   pino-std-serializers@6.2.2: {}
@@ -1305,7 +1305,7 @@ snapshots:
     dependencies:
       atomic-sleep: 1.0.0
 
-  sonic-boom@4.1.0:
+  sonic-boom@4.2.0:
     dependencies:
       atomic-sleep: 1.0.0
 
@@ -1325,10 +1325,10 @@ snapshots:
     dependencies:
       has-flag: 4.0.0
 
-  synckit@0.9.1:
+  synckit@0.9.2:
     dependencies:
       '@pkgr/core': 0.1.1
-      tslib: 2.7.0
+      tslib: 2.8.1
 
   text-table@0.2.0: {}
 
@@ -1336,7 +1336,7 @@ snapshots:
     dependencies:
       real-require: 0.2.0
 
-  tslib@2.7.0: {}
+  tslib@2.8.1: {}
 
   type-check@0.4.0:
     dependencies:
@@ -1346,7 +1346,7 @@ snapshots:
 
   type-fest@4.26.1: {}
 
-  typescript@5.6.2: {}
+  typescript@5.6.3: {}
 
   undici-types@6.19.8: {}
 

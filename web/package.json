@@ -44,7 +44,7 @@
     "framer-motion": "^11.5.4",
     "js-cookie": "^3.0.5",
     "livekit-client": "^2.6.0",
-    "livekit-server-sdk": "^2.6.1",
+    "livekit-server-sdk": "^2.7.3",
     "lucide-react": "^0.437.0",
     "next": "14.2.7",
     "react": "^18",
