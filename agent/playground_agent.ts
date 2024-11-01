@@ -9,14 +9,9 @@ import {
   multimodal,
 } from "@livekit/agents";
 import * as openai from "@livekit/agents-plugin-openai";
-import type {
-  LocalParticipant,
-  Participant,
-  TrackPublication,
-} from "@livekit/rtc-node";
-import { RemoteParticipant, TrackSource, type RpcInvocationData } from "@livekit/rtc-node";
+import type { Participant } from "@livekit/rtc-node";
+import { RemoteParticipant, type RpcInvocationData } from "@livekit/rtc-node";
 import { fileURLToPath } from "node:url";
-import { v4 as uuidv4 } from "uuid";
 
 function safeLogConfig(config: SessionConfig): string {
   const safeConfig = { ...config, openaiApiKey: "[REDACTED]" };
@@ -50,6 +45,7 @@ interface SessionConfig {
   turnDetection: TurnDetectionType;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function parseSessionConfig(data: any): SessionConfig {
   return {
     openaiApiKey: data.openai_api_key || "",
@@ -65,7 +61,7 @@ function parseSessionConfig(data: any): SessionConfig {
   };
 }
 
-function configEqual(obj1: any, obj2: any): boolean {
+function configEqual(obj1: SessionConfig, obj2: SessionConfig): boolean {
   if (obj1 === obj2) return true;
   if (
     typeof obj1 !== "object" ||
@@ -74,19 +70,18 @@ function configEqual(obj1: any, obj2: any): boolean {
     obj2 === null
   )
     return false;
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
+  const keys1 = Object.keys(obj1) as (keyof SessionConfig)[];
+  const keys2 = Object.keys(obj2) as (keyof SessionConfig)[];
   if (keys1.length !== keys2.length) return false;
   for (const key of keys1) {
     if (key === "openaiApiKey") continue;
-    if (!keys2.includes(key) || !configEqual(obj1[key], obj2[key]))
-      return false;
+    if (!keys2.includes(key) || obj1[key] !== obj2[key]) return false;
   }
   return true;
 }
 
 function modalitiesFromString(
-  modalities: string
+  modalities: string,
 ): ["text", "audio"] | ["text"] {
   const modalitiesMap: { [key: string]: ["text", "audio"] | ["text"] } = {
     text_and_audio: ["text", "audio"],
@@ -100,24 +95,24 @@ function showToast(
   participant: Participant,
   title: string,
   description: string | undefined,
-  variant: "success" | "warning" | "destructive" | "default"
+  variant: "success" | "warning" | "destructive" | "default",
 ) {
   ctx.room.localParticipant?.performRpc({
     destinationIdentity: participant.identity,
     method: "pg.toast",
-    payload: JSON.stringify({ title, description, variant })
+    payload: JSON.stringify({ title, description, variant }),
   });
 }
 
 async function runMultimodalAgent(
   ctx: JobContext,
-  participant: RemoteParticipant
+  participant: RemoteParticipant,
 ) {
   const metadata = JSON.parse(participant.metadata);
   const config = parseSessionConfig(metadata);
-  var lastConfig = config;
+  let lastConfig = config;
   console.log(
-    `starting multimodal agent with config: ${safeLogConfig(config)}`
+    `starting multimodal agent with config: ${safeLogConfig(config)}`,
   );
 
   const model = new openai.realtime.RealtimeModel({
@@ -132,7 +127,7 @@ async function runMultimodalAgent(
 
   const agent = new multimodal.MultimodalAgent({ model });
   const session = (await agent.start(
-    ctx.room
+    ctx.room,
   )) as openai.realtime.RealtimeSession;
 
   session.conversation.item.create({
@@ -149,13 +144,11 @@ async function runMultimodalAgent(
 
   ctx.room.localParticipant?.registerRpcMethod(
     "pg.updateConfig",
-    async (
-      data: RpcInvocationData
-    ) => {
+    async (data: RpcInvocationData) => {
       const newConfig = parseSessionConfig(JSON.parse(data.payload));
       if (!configEqual(newConfig, lastConfig)) {
         console.log(
-          `updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`
+          `updating config: ${JSON.stringify(newConfig)} from ${JSON.stringify(lastConfig)}`,
         );
         lastConfig = newConfig;
         session.sessionUpdate({
@@ -170,7 +163,7 @@ async function runMultimodalAgent(
       } else {
         return JSON.stringify({ changed: false });
       }
-    }
+    },
   );
 
   session.on("response_done", (response: openai.realtime.RealtimeResponse) => {
