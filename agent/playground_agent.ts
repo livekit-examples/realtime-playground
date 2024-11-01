@@ -90,14 +90,14 @@ function modalitiesFromString(
   return modalitiesMap[modalities] || ["text", "audio"];
 }
 
-function showToast(
+async function showToast(
   ctx: JobContext,
   participant: Participant,
   title: string,
   description: string | undefined,
   variant: "success" | "warning" | "destructive" | "default",
 ) {
-  ctx.room.localParticipant?.performRpc({
+  await ctx.room.localParticipant?.performRpc({
     destinationIdentity: participant.identity,
     method: "pg.toast",
     payload: JSON.stringify({ title, description, variant }),
