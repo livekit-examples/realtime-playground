@@ -15,7 +15,7 @@ importers:
         specifier: ^0.3.5
         version: 0.3.5
       '@livekit/rtc-node':
-        specifier: 0.11.0
+        specifier: ^0.11.0
         version: 0.11.0
       eslint:
         specifier: ^8
