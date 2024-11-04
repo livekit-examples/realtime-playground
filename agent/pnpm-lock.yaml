@@ -4,19 +4,19 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  '@livekit/rtc-node': ^0.11.0
-
 importers:
 
   .:
     dependencies:
       '@livekit/agents':
-        specifier: ^0.3.4
-        version: 0.3.4
+        specifier: ^0.3.5
+        version: 0.3.5
       '@livekit/agents-plugin-openai':
-        specifier: ^0.3.4
-        version: 0.3.4
+        specifier: ^0.3.5
+        version: 0.3.5
+      '@livekit/rtc-node':
+        specifier: ^0.11.0
+        version: 0.11.0
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -29,9 +29,6 @@ importers:
       eslint-plugin-unused-imports:
         specifier: 4.1.4
         version: 4.1.4(@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)
-      uuid:
-        specifier: ^10.0.0
-        version: 10.0.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -39,9 +36,6 @@ importers:
       '@types/node':
         specifier: ^22.7.5
         version: 22.8.6
-      '@types/uuid':
-        specifier: ^10.0.0
-        version: 10.0.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.12.0
         version: 8.12.2(@typescript-eslint/parser@8.12.2(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)
@@ -241,11 +235,11 @@ packages:
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
 
-  '@livekit/agents-plugin-openai@0.3.4':
-    resolution: {integrity: sha512-zODOW2Iwv6TcgsNKTU25CXj4+Y3KPUEOS2pOOl3gP5C5C10RTLZdAl1HKoKWoaGTby27RgvOfsUGu4e3p2yPtA==}
+  '@livekit/agents-plugin-openai@0.3.5':
+    resolution: {integrity: sha512-8Av1zRpt5A+SN8px997RhF+KrOtdkVqBsMjMTJOPHGveBzFFz64WQ3/69lT7NYVJL5nlfDvLPe9VeiMVlz9Pvg==}
 
-  '@livekit/agents@0.3.4':
-    resolution: {integrity: sha512-OdB49oTY97ltZeBWEsQmxvxNlxw09lF6wZWgqed4HpnA0c0FxADpHK6tgexMXFgQWiaT4pdJXxBX15Bd/9IHrg==}
+  '@livekit/agents@0.3.5':
+    resolution: {integrity: sha512-qjEIRkr/HdOvEOnvLKZMfnQ472bShQ1Ai2KKng8a1caSDHiLhQBeSb1tzA1Evsmm1k8hilXqh+81/SDj4cfiDA==}
 
   '@livekit/mutex@1.0.0':
     resolution: {integrity: sha512-aiUhoThBNF9UyGTxEURFzJLhhPLIVTnQiEVMjRhPnfHNKLfo2JY9xovHKIus7B78UD5hsP6DlgpmAsjrz4U0Iw==}
@@ -308,9 +302,6 @@ packages:
 
   '@types/node@22.8.6':
     resolution: {integrity: sha512-tosuJYKrIqjQIlVCM4PEGxOmyg3FCPa/fViuJChnGeEIhjA46oy8FMVoF9su1/v8PNs2a8Q0iFNyOx0uOF91nw==}
-
-  '@types/uuid@10.0.0':
-    resolution: {integrity: sha512-7gqG38EyHgyP1S+7+xomFtL+ZNHcKv6DwNaCZmJmo1vgMugyF3TCnXVg4t1uk89mLNwnLtnY3TpOpCOyp1/xHQ==}
 
   '@typescript-eslint/eslint-plugin@8.12.2':
     resolution: {integrity: sha512-gQxbxM8mcxBwaEmWdtLCIGLfixBMHhQjBqR8sVWNTPpcj45WlYL2IObS/DNMLH1DBP0n8qz+aiiLTGfopPEebw==}
@@ -973,10 +964,6 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  uuid@10.0.0:
-    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
-    hasBin: true
-
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
@@ -1121,16 +1108,16 @@ snapshots:
 
   '@humanwhocodes/object-schema@2.0.3': {}
 
-  '@livekit/agents-plugin-openai@0.3.4':
+  '@livekit/agents-plugin-openai@0.3.5':
     dependencies:
-      '@livekit/agents': 0.3.4
+      '@livekit/agents': 0.3.5
       '@livekit/rtc-node': 0.11.0
       ws: 8.18.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
 
-  '@livekit/agents@0.3.4':
+  '@livekit/agents@0.3.5':
     dependencies:
       '@livekit/mutex': 1.0.0
       '@livekit/protocol': 1.27.1
@@ -1197,8 +1184,6 @@ snapshots:
   '@types/node@22.8.6':
     dependencies:
       undici-types: 6.19.8
-
-  '@types/uuid@10.0.0': {}
 
   '@typescript-eslint/eslint-plugin@8.12.2(@typescript-eslint/parser@8.12.2(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)':
     dependencies:
@@ -1880,8 +1865,6 @@ snapshots:
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
-
-  uuid@10.0.0: {}
 
   which@2.0.2:
     dependencies:
