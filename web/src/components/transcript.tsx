@@ -157,7 +157,7 @@ export function Transcript({
                       </span>
                     </div>
                   </div>
-                )
+                ),
             )}
             <div ref={transcriptEndRef} />
           </div>
