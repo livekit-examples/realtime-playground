@@ -75,7 +75,7 @@ export function Transcript({
 
     displayTranscriptions.forEach(({ segment, participant, timestamp }) => {
       const csvRow = [
-        new Date(timestamp).toLocaleTimeString([], {
+        new Date(timestamp || 0).toLocaleTimeString([], {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
@@ -149,7 +149,7 @@ export function Transcript({
                             : "text-right block"
                         }`}
                       >
-                        {new Date(timestamp).toLocaleTimeString([], {
+                        {new Date(timestamp || 0).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
                           second: '2-digit',
