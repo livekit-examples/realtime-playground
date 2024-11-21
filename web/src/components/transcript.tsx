@@ -137,7 +137,7 @@ export function Transcript({
                       "flex w-max max-w-[75%] flex-col gap-2 rounded-lg px-3 py-2 text-sm",
                       participant?.isAgent
                         ? "bg-neutral-100 text-[#09090B]"
-                        : "ml-auto border border-neutral-300"
+                        : "ml-auto border border-neutral-300",
                     )}
                   >
                     <div className="flex flex-col">

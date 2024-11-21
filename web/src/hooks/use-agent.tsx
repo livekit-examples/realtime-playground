@@ -14,7 +14,6 @@ import {
 } from "livekit-client";
 import { useConnection } from "@/hooks/use-connection";
 import { useToast } from "@/hooks/use-toast";
-
 interface Transcription {
   segment: TranscriptionSegment;
   participant?: Participant;
@@ -91,7 +90,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     );
     const mergedSorted = sorted.reduce((acc, current) => {
       if (acc.length === 0) {
-      return [{...current, timestamp: current.segment.firstReceivedTime}];
+        return [{...current, timestamp: current.segment.firstReceivedTime}];
       }
 
       const last = acc[acc.length - 1];
@@ -119,7 +118,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
           },
         ];
       } else {
-      return [...acc, {...current, timestamp: current.segment.firstReceivedTime}];
+        return [...acc, {...current, timestamp: current.segment.firstReceivedTime}];
       }
     }, [] as Transcription[]);
     setDisplayTranscriptions(mergedSorted);
