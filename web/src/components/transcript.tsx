@@ -19,7 +19,7 @@ export function Transcript({
 
   const handleScrollVisibility = (
     container: HTMLElement,
-    scrollButton: HTMLButtonElement
+    scrollButton: HTMLButtonElement,
   ) => {
     const distanceFromBottom = calculateDistanceFromBottom(container);
     const shouldShowButton = distanceFromBottom > 100;
