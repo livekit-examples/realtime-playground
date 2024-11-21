@@ -19,7 +19,7 @@ export function Instructions() {
     <div
       className={`flex flex-1 flex-col w-full gap-[4px] border p-4 rounded-lg ${
         isFocused ? "ring-1" : "ring-0"
-      } h-[70vh] overflow-y-auto`}
+      } h-[200px] overflow-y-auto`}
     >
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center">
