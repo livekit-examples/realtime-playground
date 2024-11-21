@@ -110,7 +110,7 @@ export function Transcript({
 
   return (
     <>
-      <div className="flex items-center justify-between sticky top-0 left-0 bg-white w-full p-4">
+      <div className="flex items-center justify-between bg-white w-full p-4 border-b sticky top-0 z-10">
         <h2 className="text-xs font-semibold uppercase tracking-widest">
           Transcript
         </h2>
