@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useAgent } from "@/hooks/use-agent";
 import { useEffect, useRef, RefObject, useState } from "react";
-// import { FaDownload } from 'react-icons/fa';
 
 export function Transcript({
   scrollContainerRef,
