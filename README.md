@@ -16,8 +16,7 @@ This directory houses the web frontend, built with Next.js.
 
 ## Prerequisites
 
-- Node.js and pnpm (for web frontend and Node.js agent)
-- Python 3.9 or higher (for Python agent)
+- Python 3.9 or higher
 - pip (Python package installer)
 - LiveKit Cloud or self-hosted LiveKit server
 
