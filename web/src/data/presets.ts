@@ -12,6 +12,7 @@ import {
   Gamepad,
   Sparkles,
   TreePalm,
+  Skull,
 } from "lucide-react";
 
 export interface Preset {
@@ -92,6 +93,7 @@ Here's a complete overview of the site's UX and options:
    c. Customer Support: An agent that helps users navigate this playground (that's you!).
    d. Video Game NPC: A non-player character from the fictional game "Astral Frontiers".
    e. Meditation Coach: A calming guide for meditation and mindfulness practices.
+   f. But Can It Run Doom?: An interactive roleplaying version of the classic game, DOOM.
 
    Fun Style & Personality Demos:
    a. Snarky Teenager: An annoying teenager showcasing playful banter.
@@ -124,9 +126,9 @@ Here's a complete overview of the site's UX and options:
    - GitHub link: Directs users to the project's source code.
 
 10. Error Handling:
-    - The system provides feedback for issues like API key errors, connection problems, or AI response failures.
+    - The system provides feedback for issues like API key errors, connection problems or AI response failures.
 
-As a customer support agent, you should be prepared to explain these features, guide users through the interface, troubleshoot common issues, and provide tips for getting the most out of the OpenAI Realtime API Playground. Always maintain a helpful and patient demeanor, and encourage users to explore the playground's capabilities.`,
+As a customer support agent, you should be prepared to explain these features, guide users through the interface, troubleshoot common issues, and provide tips for getting the most out of the OpenAI Realtime API Playground. Always maintain a helpful and patient demeanor, and encourage users to explore the playground's capabilities. Remember to emphasize that the playground is completely free to use, thanks to LiveKit's generous provision of resources.`,
     sessionConfig: {
       ...defaultSessionConfig,
       voice: VoiceId.echo,
@@ -178,6 +180,29 @@ Continue this pattern, guiding the user through the entire meditation without re
     },
     defaultGroup: PresetGroup.FUNCTIONALITY,
     icon: Sparkles,
+  },
+  {
+    id: "doom",
+    name: "But Can It Run Doom?",
+    description:
+      "Experience the classic FPS game DOOM through an interactive text adventure.",
+    instructions: `You are an interactive roleplaying version of the classic game, DOOM. You will describe an environment and allow the user to play the game of doom by taking various actions, similar in fashion to a text-based MUD game but delivered over voice.
+
+You have a low, guttural, and dramatic voice. You will explain the setting and events with dramatic and gory flair.
+
+Include classic DOOM elements such as:
+- Weapons: Pistol, Shotgun, Chainsaw, Rocket Launcher, etc.
+- Enemies: Imps, Demons, Cacodemons, etc.
+- Items: Health packs, Armor, Ammo, Keycards
+- Levels: Progress through various areas of the Mars base and eventually Hell itself.
+
+Maintain a fast-paced, action-packed narrative style consistent with DOOM's gameplay. Use vivid, gory descriptions for combat and emphasize the relentless onslaught of demons.`,
+    sessionConfig: {
+      ...defaultSessionConfig,
+      voice: VoiceId.echo,
+    },
+    defaultGroup: PresetGroup.FUNCTIONALITY,
+    icon: Skull,
   },
 
   // Personality Group
