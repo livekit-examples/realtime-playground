@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import { PlaygroundStateProvider } from "@/hooks/use-playground-state";
 import { ConnectionProvider } from "@/hooks/use-connection";
@@ -6,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { PHProvider } from "@/hooks/posthog-provider";
 import { Public_Sans } from "next/font/google";
+import dynamic from "next/dynamic";
 
 const PostHogPageView = dynamic(
   () => import("../components/posthog-pageview"),
@@ -23,28 +23,6 @@ const publicSans = Public_Sans({
 });
 
 import "@livekit/components-styles";
-
-export const metadata: Metadata = {
-  title: "Realtime Playground",
-  description:
-    "Try OpenAI's new Realtime API right from your browser. Built on LiveKit Agents.",
-  openGraph: {
-    title: "Realtime Playground",
-    description:
-      "Try OpenAI's new Realtime API right from your browser. Built on LiveKit Agents.",
-    type: "website",
-    url: "https://playground.livekit.io/",
-    images: [
-      {
-        url: "https://playground.livekit.io/og-image.png",
-        width: 1200,
-        height: 675,
-        type: "image/png",
-        alt: "Realtime Playground",
-      },
-    ],
-  },
-};
 
 export default function RootLayout({
   children,

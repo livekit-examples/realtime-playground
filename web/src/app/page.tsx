@@ -4,6 +4,50 @@ import { Auth } from "@/components/auth";
 import LK from "@/components/lk";
 import Heart from "@/assets/heart.svg";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { defaultPresets } from "@/data/presets";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}): Promise<Metadata> {
+  let title = "Realtime Playground";
+  let description =
+    "Speech-to-speech playground for OpenAI's new Realtime API. Built on LiveKit Agents.";
+
+  const presetId = searchParams?.preset;
+  if (presetId) {
+    const selectedPreset = defaultPresets.find(
+      (preset) => preset.id === presetId,
+    );
+    if (selectedPreset) {
+      title = `Realtime Playground`;
+      description = `Speak to a "${selectedPreset.name}" in a speech-to-speech playground for OpenAI's new Realtime API. Built on LiveKitAgents.`;
+    }
+  }
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      url: "https://playground.livekit.io/",
+      images: [
+        {
+          url: "https://playground.livekit.io/og-image.png",
+          width: 1200,
+          height: 675,
+          type: "image/png",
+          alt: title,
+        },
+      ],
+    },
+  };
+}
+
 export default function Dashboard() {
   return (
     <div className="flex flex-col h-full bg-neutral-100">
