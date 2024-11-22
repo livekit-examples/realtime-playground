@@ -2,6 +2,17 @@ import { AccessToken } from "livekit-server-sdk";
 import { PlaygroundState } from "@/data/playground-state";
 
 export async function POST(request: Request) {
+  let playgroundState: PlaygroundState;
+
+  try {
+    playgroundState = await request.json();
+  } catch (error) {
+    return Response.json(
+      { error: "Invalid JSON in request body" },
+      { status: 400 },
+    );
+  }
+
   const {
     instructions,
     openaiAPIKey,
@@ -15,7 +26,14 @@ export async function POST(request: Request) {
       vadSilenceDurationMs,
       vadPrefixPaddingMs,
     },
-  }: PlaygroundState = await request.json();
+  } = playgroundState;
+
+  if (!openaiAPIKey) {
+    return Response.json(
+      { error: "OpenAI API key is required" },
+      { status: 400 },
+    );
+  }
 
   const roomName = Math.random().toString(36).slice(7);
   const apiKey = process.env.LIVEKIT_API_KEY;
