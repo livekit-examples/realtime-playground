@@ -4,7 +4,15 @@ import { PlaygroundStateProvider } from "@/hooks/use-playground-state";
 import { ConnectionProvider } from "@/hooks/use-connection";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
+import { PHProvider } from "@/hooks/posthog-provider";
 import { Public_Sans } from "next/font/google";
+
+const PostHogPageView = dynamic(
+  () => import("../components/posthog-pageview"),
+  {
+    ssr: false,
+  }
+);
 
 // Configure the Public Sans font
 const publicSans = Public_Sans({
@@ -46,14 +54,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={publicSans.className}>
-        <PlaygroundStateProvider>
-          <ConnectionProvider>
-            <TooltipProvider>
-              {children}
-              <Toaster />
-            </TooltipProvider>
-          </ConnectionProvider>
-        </PlaygroundStateProvider>
+        <PHProvider>
+          <PlaygroundStateProvider>
+            <ConnectionProvider>
+              <TooltipProvider>
+                <PostHogPageView />
+                {children}
+                <Toaster />
+              </TooltipProvider>
+            </ConnectionProvider>
+          </PlaygroundStateProvider>
+        </PHProvider>
       </body>
     </html>
   );
