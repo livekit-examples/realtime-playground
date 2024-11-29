@@ -59,6 +59,16 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     };
     room.on(RoomEvent.TranscriptionReceived, updateRawSegments);
 
+    // const handleDataReceived = (
+    //   payload: Uint8Array,
+    //   participant?: RemoteParticipant | undefined,
+    //   kind?: any | undefined,
+    //   topic?: string | undefined
+    // ) => {
+    //   console.log("topic:"+topic)
+    // };
+    // room.on(RoomEvent.DataReceived,handleDataReceived)
+
     return () => {
       room.off(RoomEvent.TranscriptionReceived, updateRawSegments);
     };

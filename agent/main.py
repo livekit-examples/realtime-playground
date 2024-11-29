@@ -5,7 +5,7 @@ import json
 import logging
 import uuid
 from dataclasses import asdict, dataclass
-from typing import Any, Dict, Literal
+from typing import Any, Dict, List, Literal, Union
 
 from livekit import rtc
 from livekit.agents import (
@@ -99,8 +99,7 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
     metadata = json.loads(participant.metadata)
     config = parse_session_config(metadata)
 
-    logger.info(f"starting MultimodalAgent with config: {config.to_dict()}")
-
+    # logger.info(f"starting MultimodalAgent with config: {config.to_dict()}")
     if not config.openai_api_key:
         raise Exception("OpenAI API Key is required")
 
@@ -116,7 +115,6 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
     assistant = MultimodalAgent(model=model)
     assistant.start(ctx.room)
     session = model.sessions[0]
-
     if config.modalities == ["text", "audio"]:
         session.conversation.item.create(
             llm.ChatMessage(
@@ -318,6 +316,115 @@ def run_multimodal_agent(ctx: JobContext, participant: rtc.Participant):
                 )
             )
             last_transcript_id = None
+
+    @assistant.on("user_started_speaking")
+    def user_started_speaking():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"user_started_speaking")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="user_started_speaking")
+        # )
+
+    @assistant.on("user_stopped_speaking")
+    def user_stopped_speaking():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"user_stopped_speaking msg")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="user_stopped_speaking")
+        # )
+
+    @assistant.on("agent_started_speaking")
+    def agent_started_speaking():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"agent_started_speaking msg:{remote_participant.identity}")
+        asyncio.create_task(
+            send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="agent_started_speaking")
+        )
+
+    @assistant.on("agent_stopped_speaking")
+    def agent_stopped_speaking():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"agent_stopped_speaking msg:{remote_participant.identity}")
+        asyncio.create_task(
+            send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="agent_stopped_speaking")
+        )
+
+    @assistant.on("user_speech_committed")
+    def user_speech_committed():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"user_speech_committed")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="user_speech_committed")
+        # )
+
+    @assistant.on("agent_speech_committed")
+    def agent_speech_committed():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"agent_speech_committed")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="agent_speech_committed")
+        # )
+
+    @assistant.on("agent_speech_interrupted")
+    def agent_speech_interrupted():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"agent_speech_interrupted")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="agent_speech_interrupted")
+        # )
+
+    @assistant.on("function_calls_collected")
+    def function_calls_collected():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"function_calls_collected")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="function_calls_collected")
+        # )
+
+    @assistant.on("function_calls_finished")
+    def function_calls_finished():
+        # convert string lists to strings, drop images
+        remote_participant = next(iter(ctx.room.remote_participants.values()), None)
+        if not remote_participant:
+            return
+        logger.info(f"function_calls_finished")
+        # asyncio.create_task(
+        #     send_event(payload="",reliable=True,destination_identities=[remote_participant.identity],topic="function_calls_finished")
+        # )
+
+    async def send_event(
+        payload: Union[bytes, str],
+        *,
+        reliable: bool = True,
+        destination_identities: List[str] = [],
+        topic: str = "",
+    ):
+        await ctx.room.local_participant.publish_data(payload=payload,reliable=reliable,destination_identities=destination_identities,topic=topic)
+
 
 
 if __name__ == "__main__":
