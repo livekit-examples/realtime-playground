@@ -2,8 +2,8 @@ import { Header } from "@/components/header";
 import { RoomComponent } from "@/components/room-component";
 import { Auth } from "@/components/auth";
 import LK from "@/components/lk";
-import Heart from "@/assets/heart.svg";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+// import Heart from "@/assets/heart.svg";
+// import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { defaultPresets } from "@/data/presets";
 import { Metadata } from "next";
 
@@ -23,28 +23,28 @@ export async function generateMetadata({
     );
     if (selectedPreset) {
       title = `Realtime Playground`;
-      description = `Speak to a "${selectedPreset.name}" in a speech-to-speech playground for OpenAI's new Realtime API. Built on LiveKitAgents.`;
+      description = `Speak to a "${selectedPreset.name}" in a speech-to-speech playground for OpenAI's new Realtime API.`;
     }
   }
 
   return {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      type: "website",
-      url: "https://playground.livekit.io/",
-      images: [
-        {
-          url: "https://playground.livekit.io/og-image.png",
-          width: 1200,
-          height: 675,
-          type: "image/png",
-          alt: title,
-        },
-      ],
-    },
+    // openGraph: {
+    //   title,
+    //   description,
+    //   type: "website",
+    //   url: "https://playground.livekit.io/",
+    //   images: [
+    //     {
+    //       url: "https://playground.livekit.io/og-image.png",
+    //       width: 1200,
+    //       height: 675,
+    //       type: "image/png",
+    //       alt: title,
+    //     },
+    //   ],
+    // },
   };
 }
 
@@ -59,7 +59,7 @@ export default function Dashboard() {
         <Header />
         <RoomComponent />
       </main>
-      <footer className="hidden md:flex md:items-center md:gap-2 md:justify-end font-mono uppercase text-right pt-1 pb-2 px-8 text-xs text-gray-600 w-full md:mx-auto">
+      {/* < footer className="hidden md:flex md:items-center md:gap-2 md:justify-end font-mono uppercase text-right pt-1 pb-2 px-8 text-xs text-gray-600 w-full md:mx-auto">
         Built with
         <Heart />
         on
@@ -82,7 +82,7 @@ export default function Dashboard() {
           View source on GitHub
         </a>
         • © 2024 LiveKit
-      </footer>
+      </footer> */}
     </div>
   );
 }
