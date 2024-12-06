@@ -12,11 +12,11 @@ env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
   - variable: NEXT_PUBLIC_LIVEKIT_URL
-    secret: LIVEKIT_URL
-  - variable: NEXT_PUBLIC_LIVEKIT_API_KEY
-    secret: LIVEKIT_API_KEY
-  - variable: NEXT_PUBLIC_LIVEKIT_API_SECRET
-    secret: LIVEKIT_API_SECRET
+    secret: projects/837808454450/secrets/NEXT_PUBLIC_LIVEKIT_URL
+  - variable: LIVEKIT_API_KEY
+    secret: projects/837808454450/secrets/LIVEKIT_API_KEY
+  - variable: LIVEKIT_API_SECRET
+    secret: projects/837808454450/secrets/LIVEKIT_API_SECRET
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
   # - variable: MY_SECRET
