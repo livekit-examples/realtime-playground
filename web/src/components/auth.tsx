@@ -26,7 +26,7 @@ import { useForm } from "react-hook-form";
 import { ellipsisMiddle } from "@/lib/utils";
 import { AuthBanner } from "./authBanner";
 import { LockKeyhole } from "lucide-react";
-import { ArrowUpRight } from "lucide-react";
+// import { ArrowUpRight } from "lucide-react";
 // import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 const AuthFormSchema = z.object({
