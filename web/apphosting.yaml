@@ -1,11 +1,11 @@
 # Settings for Backend (on Cloud Run).
 # See https://firebase.google.com/docs/app-hosting/configure#cloud-run
 runConfig:
-  minInstances: 2
-  maxInstances: 100
-  concurrency: 80
-  cpu: 2
-  memoryMiB: 1024
+  minInstances: 0
+  # maxInstances: 100
+  # concurrency: 80
+  # cpu: 1
+  # memoryMiB: 512
 
 # Environment variables and secrets.
 env:
@@ -16,13 +16,11 @@ env:
     availability:
       - BUILD
       - RUNTIME
-
   - variable: LIVEKIT_API_KEY
     secret: projects/837808454450/secrets/LIVEKIT_API_KEY
     availability:
       - BUILD
       - RUNTIME
-
   - variable: LIVEKIT_API_SECRET
     secret: projects/837808454450/secrets/LIVEKIT_API_SECRET
     availability:
