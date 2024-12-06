@@ -11,21 +11,12 @@ runConfig:
 env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
-  - variable: LIVEKIT_URL
+  - variable: NEXT_PUBLIC_LIVEKIT_URL
     secret: LIVEKIT_URL
-    availability:
-      - BUILD
-      - RUNTIME
-  - variable: LIVEKIT_API_KEY
+  - variable: NEXT_PUBLIC_LIVEKIT_API_KEY
     secret: LIVEKIT_API_KEY
-    availability:
-      - BUILD
-      - RUNTIME
-  - variable: LIVEKIT_API_SECRET
+  - variable: NEXT_PUBLIC_LIVEKIT_API_SECRET
     secret: LIVEKIT_API_SECRET
-    availability:
-      - BUILD
-      - RUNTIME
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
   # - variable: MY_SECRET
