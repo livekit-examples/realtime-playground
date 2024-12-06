@@ -12,17 +12,17 @@ env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
   - variable: LIVEKIT_URL
-    value: LIVEKIT_URL
+    secret: LIVEKIT_URL
     availability:
       - BUILD
       - RUNTIME
   - variable: LIVEKIT_API_KEY
-    value: LIVEKIT_API_KEY
+    secret: LIVEKIT_API_KEY
     availability:
       - BUILD
       - RUNTIME
   - variable: LIVEKIT_API_SECRET
-    value: LIVEKIT_API_SECRET
+    secret: LIVEKIT_API_SECRET
     availability:
       - BUILD
       - RUNTIME
