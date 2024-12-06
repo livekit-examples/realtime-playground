@@ -27,7 +27,7 @@ import { ellipsisMiddle } from "@/lib/utils";
 import { AuthBanner } from "./authBanner";
 import { LockKeyhole } from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+// import { GitHubLogoIcon } from "@radix-ui/react-icons";
 
 const AuthFormSchema = z.object({
   openaiAPIKey: z.string().min(1, { message: "API key is required" }),
@@ -115,9 +115,9 @@ export function AuthDialog({
                   <DialogTitle>OpenAI Realtime API Playground</DialogTitle>
                   <DialogDescription>
                     Try out OpenAI&apos;s new Realtime API right from your
-                    browser with this playground built on{" "}
+                    tēmi with this playground built on{" "}
                     <a
-                      href="https://github.com/livekit/agents"
+                      //href="https://github.com/livekit/agents"
                       target="_blank"
                       className="underline"
                     >
@@ -128,7 +128,7 @@ export function AuthDialog({
                   <DialogDescription>
                     You must have a valid{" "}
                     <a
-                      href="https://platform.openai.com/api-keys"
+                      //href="https://platform.openai.com/api-keys"
                       target="_blank"
                       className="underline text-oai-green"
                     >
@@ -147,14 +147,14 @@ export function AuthDialog({
                       <div className="flex flex-col gap-2">
                         <FormLabel className="font-semibold text-sm whitespace-nowrap">
                           Enter your{" "}
-                          <a
+                          {/* <a
                             href="https://platform.openai.com/api-keys"
                             target="_blank"
                             className="inline-flex items-center text-oai-green underline"
-                          >
+                          > */}
                             OpenAI API Key
-                            <ArrowUpRight className="h-4 w-4 ml-1" />
-                          </a>
+                            {/* <ArrowUpRight className="h-4 w-4 ml-1" /> */}
+                          {/* </a> */}
                         </FormLabel>
                         <div className="flex gap-2 w-full">
                           <FormControl className="w-full">
@@ -175,12 +175,12 @@ export function AuthDialog({
                   <div className="flex items-center gap-2 flex-1">
                     <LockKeyhole className="h-3 w-3 flex-shrink-0" />
                     <span className="font-semibold">
-                      Your key is stored only in your browser&apos;s
+                      Your key is stored only in your tēmi&apos;s
                       LocalStorage.
                     </span>
                   </div>
 
-                  <div className="flex items-center flex-1 justify-end">
+                  {/* <div className="flex items-center flex-1 justify-end">
                     <a
                       href="https://github.com/livekit-examples/realtime-playground"
                       target="_blank"
@@ -190,7 +190,7 @@ export function AuthDialog({
                       <GitHubLogoIcon className="h-5 w-5" />
                       View source on GitHub
                     </a>
-                  </div>
+                  </div> */}
                 </DialogDescription>
               </form>
             </Form>
