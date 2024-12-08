@@ -1,0 +1,23 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  cpu: 1
+  memoryMiB: 1024
+
+# Environment variables and secrets.
+env:
+  # Configure environment variables.
+  # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
+  - variable: NEXT_PUBLIC_LIVEKIT_URL
+    secret: LIVEKIT_URL
+
+  - variable: NEXT_PUBLIC_LIVEKIT_API_KEY
+    secret: LIVEKIT_API_KEY
+
+  - variable: NEXT_PUBLIC_LIVEKIT_API_SECRET
+    secret: LIVEKIT_API_SECRET
+
+  # Grant access to secrets in Cloud Secret Manager.
+  # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+  # - variable: MY_SECRET
+  #   secret: mySecretRef

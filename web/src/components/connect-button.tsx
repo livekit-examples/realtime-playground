@@ -52,6 +52,7 @@ export function ConnectButton() {
   return (
     <>
       <Button
+        size = "xl"
         onClick={handleConnectionToggle}
         disabled={connecting || shouldConnect}
         className="text-sm font-semibold bg-oai-green"

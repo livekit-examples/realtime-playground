@@ -36,8 +36,8 @@ export async function POST(request: Request) {
   }
 
   const roomName = Math.random().toString(36).slice(7);
-  const apiKey = process.env.LIVEKIT_API_KEY;
-  const apiSecret = process.env.LIVEKIT_API_SECRET;
+  const apiKey = process.env.NEXT_PUBLIC_LIVEKIT_API_KEY;
+  const apiSecret = process.env.NEXT_PUBLIC_LIVEKIT_API_SECRET;
   if (!apiKey || !apiSecret) {
     throw new Error("LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set");
   }
@@ -69,6 +69,6 @@ export async function POST(request: Request) {
   });
   return Response.json({
     accessToken: await at.toJwt(),
-    url: process.env.LIVEKIT_URL,
+    url: process.env.NEXT_PUBLIC_LIVEKIT_URL,
   });
 }
