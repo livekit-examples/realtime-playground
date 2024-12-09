@@ -12,25 +12,25 @@ env:
   # Configure environment variables.
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
   - variable: NEXT_PUBLIC_LIVEKIT_URL
-    secret: projects/837808454450/secrets/LIVEKIT_URL
+    secret: LIVEKIT_URL
     availability:
       - BUILD
       - RUNTIME   
 
   - variable: LIVEKIT_API_KEY
-    secret: projects/837808454450/secrets/LIVEKIT_API_KEY
+    secret: LIVEKIT_API_KEY
     availability:
       - BUILD
       - RUNTIME
 
   - variable: LIVEKIT_API_SECRET
-    secret: projects/837808454450/secrets/LIVEKIT_API_SECRET
+    secret: LIVEKIT_API_SECRET
     availability:
       - BUILD
       - RUNTIME
 
   - variable: OPENAI_API_KEY
-    secret: projects/837808454450/secrets/OPENAI_API_KEY
+    secret: OPENAI_API_KEY
     availability:
       - BUILD
       - RUNTIME
