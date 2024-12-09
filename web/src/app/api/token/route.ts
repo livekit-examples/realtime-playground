@@ -15,7 +15,6 @@ export async function POST(request: Request) {
 
   const {
     instructions,
-    openaiAPIKey,
     sessionConfig: {
       turnDetection,
       modalities,
@@ -28,6 +27,8 @@ export async function POST(request: Request) {
     },
   } = playgroundState;
 
+  const openaiAPIKey = process.env.OPENAI_API_KEY;
+
   if (!openaiAPIKey) {
     return Response.json(
       { error: "OpenAI API key is required" },
@@ -36,8 +37,9 @@ export async function POST(request: Request) {
   }
 
   const roomName = Math.random().toString(36).slice(7);
-  const apiKey = process.env.NEXT_PUBLIC_LIVEKIT_API_KEY;
-  const apiSecret = process.env.NEXT_PUBLIC_LIVEKIT_API_SECRET;
+  const apiKey = process.env.LIVEKIT_API_KEY;
+  const apiSecret = process.env.LIVEKIT_API_SECRET;
+
   if (!apiKey || !apiSecret) {
     throw new Error("LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set");
   }

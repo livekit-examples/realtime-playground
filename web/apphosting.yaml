@@ -11,11 +11,14 @@ env:
   - variable: NEXT_PUBLIC_LIVEKIT_URL
     secret: LIVEKIT_URL
 
-  - variable: NEXT_PUBLIC_LIVEKIT_API_KEY
+  - variable: LIVEKIT_API_KEY
     secret: LIVEKIT_API_KEY
 
-  - variable: NEXT_PUBLIC_LIVEKIT_API_SECRET
+  - variable: LIVEKIT_API_SECRET
     secret: LIVEKIT_API_SECRET
+  
+  - variable: OPENAI_API_KEY
+    secret: OPENAI_API_KEY
 
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters

@@ -42,15 +42,17 @@ export const ConnectionProvider = ({
   const { pgState, dispatch } = usePlaygroundState();
 
   const connect = async () => {
-    if (!pgState.openaiAPIKey) {
-      throw new Error("OpenAI API key is required to connect");
-    }
+    // if (!pgState.openaiAPIKey) {
+    //   throw new Error("OpenAI API key is required to connect");
+    // }
+    console.log(pgState)
     const response = await fetch("/api/token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(pgState),
+
     });
 
     if (!response.ok) {
@@ -73,10 +75,10 @@ export const ConnectionProvider = ({
 
   // Effect to handle API key changes
   useEffect(() => {
-    if (pgState.openaiAPIKey === null && connectionDetails.shouldConnect) {
-      disconnect();
-    }
-  }, [pgState.openaiAPIKey, connectionDetails.shouldConnect, disconnect]);
+    // if (pgState.openaiAPIKey === null && connectionDetails.shouldConnect) {
+    //   disconnect();
+    // }
+  }, [connectionDetails.shouldConnect, disconnect]); //pgState.openaiAPIKey,
 
   return (
     <ConnectionContext.Provider
