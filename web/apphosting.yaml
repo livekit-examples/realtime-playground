@@ -13,17 +13,29 @@ env:
   # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
 
   - variable: NEXT_PUBLIC_LIVEKIT_URL
-    secret: LIVEKIT_URL
+    secret: projects/837808454450/secrets/LIVEKIT_URL
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: LIVEKIT_API_KEY
-    secret: KEY_LK_API
+    secret: projects/837808454450/secrets/KEY_LK_API
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: LIVEKIT_API_SECRET
-    secret: SECRET_LK_API
+    secret: projects/837808454450/secrets/SECRET_LK_API
+    availability:
+      - BUILD
+      - RUNTIME
 
   - variable: OPENAI_API_KEY
-    secret: KEY_OPENAI_API
-
+    secret: projects/837808454450/secrets/KEY_OPENAI_API
+    availability:
+      - BUILD
+      - RUNTIME
+      
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
   # - variable: MY_SECRET
