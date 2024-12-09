@@ -16,13 +16,13 @@ env:
     secret: LIVEKIT_URL
 
   - variable: LIVEKIT_API_KEY
-    secret: projects/837808454450/secrets/KEY_LK_API
+    secret: KEY_LK_API
 
   - variable: LIVEKIT_API_SECRET
-    secret: projects/837808454450/secrets/SECRET_LK_API
+    secret: SECRET_LK_API
 
   - variable: OPENAI_API_KEY
-    secret: projects/837808454450/secrets/KEY_OPENAI_API
+    secret: KEY_OPENAI_API
 
   # Grant access to secrets in Cloud Secret Manager.
   # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
