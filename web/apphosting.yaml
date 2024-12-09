@@ -19,19 +19,19 @@ env:
       - RUNTIME
 
   - variable: LIVEKIT_API_KEY
-    secret: projects/837808454450/secrets/KEY_LK_API
+    secret: projects/837808454450/secrets/LIVEKIT_API_KEY
     availability:
       - BUILD
       - RUNTIME
 
   - variable: LIVEKIT_API_SECRET
-    secret: projects/837808454450/secrets/SECRET_LK_API
+    secret: projects/837808454450/secrets/LIVEKIT_API_SECRET
     availability:
       - BUILD
       - RUNTIME
 
   - variable: OPENAI_API_KEY
-    secret: projects/837808454450/secrets/KEY_OPENAI_API
+    secret: projects/837808454450/secrets/OPENAI_API_KEY
     availability:
       - BUILD
       - RUNTIME
