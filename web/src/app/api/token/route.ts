@@ -27,21 +27,21 @@ export async function POST(request: Request) {
     },
   } = playgroundState;
 
-  const openaiAPIKey = process.env.OPENAI_API_KEY;
 
-  if (!openaiAPIKey) {
-    return Response.json(
-      { error: "OpenAI API key is required" },
-      { status: 400 },
-    );
-  }
+  // if () {
+  //   return Response.json(
+  //     { error: "OpenAI API key is required" },
+  //     { status: 400 },
+  //   );
+  // }
 
   const roomName = Math.random().toString(36).slice(7);
   const apiKey = process.env.LIVEKIT_API_KEY;
   const apiSecret = process.env.LIVEKIT_API_SECRET;
+  const openaiAPIKey = process.env.OPENAI_API_KEY;
 
-  if (!apiKey || !apiSecret) {
-    throw new Error("LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set");
+  if (!apiKey || !apiSecret || !openaiAPIKey) {
+    throw new Error("OPENAI_API_KEY, LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set");
   }
 
   const at = new AccessToken(apiKey, apiSecret, {
