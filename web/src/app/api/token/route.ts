@@ -15,7 +15,6 @@ export async function POST(request: Request) {
 
   const {
     instructions,
-    openaiAPIKey,
     sessionConfig: {
       turnDetection,
       modalities,
@@ -28,18 +27,21 @@ export async function POST(request: Request) {
     },
   } = playgroundState;
 
-  if (!openaiAPIKey) {
-    return Response.json(
-      { error: "OpenAI API key is required" },
-      { status: 400 },
-    );
-  }
+
+  // if () {
+  //   return Response.json(
+  //     { error: "OpenAI API key is required" },
+  //     { status: 400 },
+  //   );
+  // }
 
   const roomName = Math.random().toString(36).slice(7);
   const apiKey = process.env.LIVEKIT_API_KEY;
   const apiSecret = process.env.LIVEKIT_API_SECRET;
-  if (!apiKey || !apiSecret) {
-    throw new Error("LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set");
+  const openaiAPIKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey || !apiSecret || !openaiAPIKey) {
+    throw new Error("OPENAI_API_KEY, LIVEKIT_API_KEY and LIVEKIT_API_SECRET must be set");
   }
 
   const at = new AccessToken(apiKey, apiSecret, {
@@ -69,6 +71,6 @@ export async function POST(request: Request) {
   });
   return Response.json({
     accessToken: await at.toJwt(),
-    url: process.env.LIVEKIT_URL,
+    url: process.env.NEXT_PUBLIC_LIVEKIT_URL,
   });
 }

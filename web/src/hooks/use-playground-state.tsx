@@ -18,7 +18,7 @@ import { playgroundStateHelpers } from "@/lib/playground-state-helpers";
 
 import { Preset, defaultPresets } from "@/data/presets";
 
-const LS_OPENAI_API_KEY_NAME = "OPENAI_API_KEY";
+// const LS_OPENAI_API_KEY_NAME = "OPENAI_API_KEY";
 const LS_USER_PRESETS_KEY = "PG_USER_PRESETS";
 const LS_SELECTED_PRESET_ID_KEY = "PG_SELECTED_PRESET_ID";
 
@@ -50,7 +50,7 @@ type Action =
       type: "SET_SESSION_CONFIG";
       payload: Partial<PlaygroundState["sessionConfig"]>;
     }
-  | { type: "SET_API_KEY"; payload: string | null }
+  // | { type: "SET_API_KEY"; payload: string | null }
   | { type: "SET_INSTRUCTIONS"; payload: string }
   | { type: "SET_USER_PRESETS"; payload: Preset[] }
   | { type: "SET_SELECTED_PRESET_ID"; payload: string | null }
@@ -71,16 +71,16 @@ function playgroundStateReducer(
           ...action.payload,
         },
       };
-    case "SET_API_KEY":
-      if (action.payload) {
-        localStorage.setItem(LS_OPENAI_API_KEY_NAME, action.payload);
-      } else {
-        localStorage.removeItem(LS_OPENAI_API_KEY_NAME);
-      }
-      return {
-        ...state,
-        openaiAPIKey: action.payload,
-      };
+    // case "SET_API_KEY":
+    //   if (action.payload) {
+    //     localStorage.setItem(LS_OPENAI_API_KEY_NAME, action.payload);
+    //   } else {
+    //     localStorage.removeItem(LS_OPENAI_API_KEY_NAME);
+    //   }
+    //   return {
+    //     ...state,
+    //     openaiAPIKey: action.payload,
+    //   };
     case "SET_INSTRUCTIONS":
       return {
         ...state,
@@ -173,13 +173,13 @@ export const PlaygroundStateProvider = ({
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   useEffect(() => {
-    const storedKey = localStorage.getItem(LS_OPENAI_API_KEY_NAME);
-    if (storedKey && storedKey.length >= 1) {
-      dispatch({ type: "SET_API_KEY", payload: storedKey });
-    } else {
-      dispatch({ type: "SET_API_KEY", payload: null });
-      setShowAuthDialog(true);
-    }
+    // const storedKey = localStorage.getItem(LS_OPENAI_API_KEY_NAME);
+    // if (storedKey && storedKey.length >= 1) {
+    //   dispatch({ type: "SET_API_KEY", payload: storedKey });
+    // } else {
+    //   dispatch({ type: "SET_API_KEY", payload: null });
+    //   setShowAuthDialog(true);
+    // }
 
     // Load presets from localStorage
     const storedPresets = localStorage.getItem(LS_USER_PRESETS_KEY);

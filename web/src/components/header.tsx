@@ -1,9 +1,9 @@
 "use client";
 
-import { CodeViewer } from "@/components/code-viewer";
+// import { CodeViewer } from "@/components/code-viewer";
 import { PresetSave } from "@/components/preset-save";
 import { PresetSelector } from "@/components/preset-selector";
-import { PresetShare } from "@/components/preset-share";
+// import { PresetShare } from "@/components/preset-share";
 
 export function Header() {
   return (
@@ -14,7 +14,7 @@ export function Header() {
             <div>
               <h2 className="text-lg font-semibold">Realtime Playground</h2>
               <p className="text-sm text-gray-500">
-                Try OpenAI&apos;s new Realtime API right from your browser.
+                Try OpenAI&apos;s new Realtime API right from your tēmi robot.
               </p>
             </div>
           </div>
@@ -23,8 +23,8 @@ export function Header() {
           <div className="flex flex-row items-center space-x-2">
             <PresetSelector />
             <PresetSave />
-            <PresetShare />
-            <CodeViewer />
+            {/* <PresetShare />
+            <CodeViewer /> */}
           </div>
         </div>
       </div>
