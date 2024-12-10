@@ -115,7 +115,7 @@ export function SessionControls() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <Button variant="destructive" onClick={disconnect}>
+      <Button size="xl" variant="destructive" onClick={disconnect}>
         Disconnect
       </Button>
     </div>

@@ -1,0 +1,42 @@
+# Settings for Backend (on Cloud Run).
+# See https://firebase.google.com/docs/app-hosting/configure#cloud-run
+runConfig:
+  minInstances: 2
+  maxInstances: 100
+  concurrency: 100
+  cpu: 2
+  memoryMiB: 1024
+
+# Environment variables and secrets.
+env:
+  # Configure environment variables.
+  # See https://firebase.google.com/docs/app-hosting/configure#user-defined-environment
+
+  - variable: NEXT_PUBLIC_LIVEKIT_URL
+    secret: projects/837808454450/secrets/LIVEKIT_URL
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: LIVEKIT_API_KEY
+    secret: projects/837808454450/secrets/LIVEKIT_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: LIVEKIT_API_SECRET
+    secret: projects/837808454450/secrets/LIVEKIT_API_SECRET
+    availability:
+      - BUILD
+      - RUNTIME
+
+  - variable: OPENAI_API_KEY
+    secret: projects/837808454450/secrets/OPENAI_API_KEY
+    availability:
+      - BUILD
+      - RUNTIME
+      
+  # Grant access to secrets in Cloud Secret Manager.
+  # See https://firebase.google.com/docs/app-hosting/configure#secret-parameters
+  # - variable: MY_SECRET
+  #   secret: mySecretRef
