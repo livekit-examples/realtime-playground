@@ -18,6 +18,7 @@ interface Transcription {
   segment: TranscriptionSegment;
   participant?: Participant;
   publication?: TrackPublication;
+  timestamp?: number; // Add this line to include a timestamp
 }
 
 interface AgentContextType {
@@ -89,7 +90,7 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
     );
     const mergedSorted = sorted.reduce((acc, current) => {
       if (acc.length === 0) {
-        return [current];
+        return [{...current, timestamp: current.segment.firstReceivedTime}];
       }
 
       const last = acc[acc.length - 1];
@@ -113,10 +114,11 @@ export function AgentProvider({ children }: { children: React.ReactNode }) {
               id: current.segment.id, // Use the id of the latest segment
               firstReceivedTime: last.segment.firstReceivedTime, // Keep the original start time
             },
+            timestamp: last.timestamp, // Keep the earliest timestamp
           },
         ];
       } else {
-        return [...acc, current];
+        return [...acc, {...current, timestamp: current.segment.firstReceivedTime}];
       }
     }, [] as Transcription[]);
     setDisplayTranscriptions(mergedSorted);
