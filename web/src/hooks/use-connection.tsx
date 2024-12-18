@@ -42,29 +42,46 @@ export const ConnectionProvider = ({
   const { pgState, dispatch } = usePlaygroundState();
 
   const connect = async () => {
-    if (!pgState.openaiAPIKey) {
-      throw new Error("OpenAI API key is required to connect");
+    // if (!pgState.openaiAPIKey) {
+    //   throw new Error("OpenAI API key is required to connect");
+    // }
+    console.log("[connect] pgState before request:", pgState);
+
+    try {
+      const requestBody = JSON.stringify(pgState);
+      console.log("[connect] Sending request to /api/token with body:", requestBody);
+
+      const response = await fetch("/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: requestBody,
+
+      });
+
+      console.log("[connect] Response status:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("[connect] Failed to fetch token. Response text:", errorText);
+        throw new Error("Failed to fetch token");
+      }
+      const { accessToken, url } = await response.json();
+
+      console.log("[connect] Successfully fetched token:", accessToken);
+      console.log("[connect] LiveKit URL:", url);
+
+      setConnectionDetails({
+        wsUrl: url,
+        token: accessToken,
+        shouldConnect: true,
+        voice: pgState.sessionConfig.voice,
+      });
+    } catch (error: any) {
+      console.error("[connect] Error caught during token fetch:", error);
+      throw error;
     }
-    const response = await fetch("/api/token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(pgState),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch token");
-    }
-
-    const { accessToken, url } = await response.json();
-
-    setConnectionDetails({
-      wsUrl: url,
-      token: accessToken,
-      shouldConnect: true,
-      voice: pgState.sessionConfig.voice,
-    });
   };
 
   const disconnect = useCallback(async () => {
@@ -73,10 +90,10 @@ export const ConnectionProvider = ({
 
   // Effect to handle API key changes
   useEffect(() => {
-    if (pgState.openaiAPIKey === null && connectionDetails.shouldConnect) {
-      disconnect();
-    }
-  }, [pgState.openaiAPIKey, connectionDetails.shouldConnect, disconnect]);
+    // if (pgState.openaiAPIKey === null && connectionDetails.shouldConnect) {
+    //   disconnect();
+    // }
+  }, [connectionDetails.shouldConnect, disconnect]); //pgState.openaiAPIKey,
 
   return (
     <ConnectionContext.Provider
