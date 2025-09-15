@@ -39,63 +39,115 @@ export function CodeViewer() {
       .join("\n");
   };
 
-  const pythonCode = `from livekit.agents import AutoSubscribe, JobContext, WorkerOptions, WorkerType, cli, multimodal
-from livekit.plugins import openai
+    // example from: https://github.com/livekit-examples/python-agents-examples/blob/7b3ab6255be39305336b87d29f5e402bc77a3b31/realtime/openai-realtime.py
+  const pythonCode = `
+from dotenv import load_dotenv
+from pathlib import Path
+from livekit import agents
+from livekit.agents.voice import AgentSession, Agent
+from livekit.plugins import (
+    openai,
+    silero
+)
 
-async def entrypoint(ctx: JobContext):
-    await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
+load_dotenv(dotenv_path=Path(__file__).parent.parent / '.env')
 
-    agent = multimodal.MultimodalAgent(
-        model=openai.realtime.RealtimeModel(
-            instructions="""${formatInstructions(pgState.instructions.replace(/"/g, '\\"'))}""",
-            voice="${pgState.sessionConfig.voice}",
-            temperature=${pgState.sessionConfig.temperature},
-            max_response_output_tokens=${pgState.sessionConfig.maxOutputTokens === null ? '"inf"' : pgState.sessionConfig.maxOutputTokens},
-            modalities=${pgState.sessionConfig.modalities == "text_and_audio" ? '["text", "audio"]' : '["text"]'},
-            turn_detection=openai.realtime.ServerVadOptions(
-                threshold=${pgState.sessionConfig.vadThreshold},
-                silence_duration_ms=${pgState.sessionConfig.vadSilenceDurationMs},
-                prefix_padding_ms=${pgState.sessionConfig.vadPrefixPaddingMs},
-            )
+class Assistant(Agent):
+    def __init__(self) -> None:
+        super().__init__(
+          instructions="""${formatInstructions(pgState.instructions.replace(/"/g, '\\"'))}""",
+        )
+
+async def entrypoint(ctx: agents.JobContext):
+
+    rtm = openai.realtime.RealtimeModel(
+          modalities=${pgState.sessionConfig.modalities == "text_and_audio" ? '["text", "audio"]' : '["text"]'},
+          temperature=${pgState.sessionConfig.temperature},
+          voice="${pgState.sessionConfig.voice}",
+        )
+    # max_response_output_tokens must be set after initialization currently because this is missing in the init function currently
+    rtm.update_options(max_response_output_tokens=${pgState.sessionConfig.maxOutputTokens === null ? '"inf"' : pgState.sessionConfig.maxOutputTokens})
+    session = AgentSession(
+        llm=rtm,
+        vad=silero.VAD.load(
+          activation_threshold=${pgState.sessionConfig.vadThreshold},
+          min_silence_duration=${pgState.sessionConfig.vadSilenceDurationMs / 1000.0},
+          prefix_padding_duration=${pgState.sessionConfig.vadPrefixPaddingMs / 1000.0},
         )
     )
-    agent.start(ctx.room)
 
+    await session.start(
+        room=ctx.room,
+        agent=Assistant()
+    )
+
+    await session.generate_reply()
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint, worker_type=WorkerType.ROOM))
+    agents.cli.run_app(agents.WorkerOptions(entrypoint_fnc=entrypoint))
 `;
 
-  const typescriptCode = `import { JobContext, WorkerOptions, cli, defineAgent, multimodal } from '@livekit/agents';
+  // example from: https://github.com/livekit/agents-js/blob/5d49babf25de1ba3816f1ec56a4c3dd825002e8c/examples/src/realtime_agent.ts
+  const typescriptCode = `
+import {
+  type JobContext,
+  type JobProcess,
+  WorkerOptions,
+  cli,
+  defineAgent,
+  llm,
+  voice,
+} from '@livekit/agents';
 import * as openai from '@livekit/agents-plugin-openai';
-import { JobType } from '@livekit/protocol';
+import * as silero from '@livekit/agents-plugin-silero';
 import { fileURLToPath } from 'node:url';
+import { z } from 'zod';
 
 export default defineAgent({
+  prewarm: async (proc: JobProcess) => {
+    proc.userData.vad = await silero.VAD.load();
+  },
   entry: async (ctx: JobContext) => {
-    await ctx.connect();
+    const getWeather = llm.tool({
+      description: 'Called when the user asks about the weather.',
+      parameters: z.object({
+        location: z.string().describe('The location to get the weather for'),
+      }),
+      execute: async ({ location }) => {
+        return \`The weather in \${location} is sunny today.\`;
+      },
+    });
 
-    const agent = new multimodal.MultimodalAgent({
-      model: new openai.realtime.RealtimeModel({
-        instructions: \`${formatInstructions(pgState.instructions)}\`,
+    const agent = new voice.Agent({
+      instructions: \`${formatInstructions(pgState.instructions)}\`,
+      tools: {
+        getWeather,
+      },
+    });
+
+    const session = new voice.AgentSession({
+      llm: new openai.realtime.RealtimeModel({
         voice: '${pgState.sessionConfig.voice}',
         temperature: ${pgState.sessionConfig.temperature},
         maxResponseOutputTokens: ${pgState.sessionConfig.maxOutputTokens === null ? Infinity : pgState.sessionConfig.maxOutputTokens},
-        modalities: ${pgState.sessionConfig.modalities === "text_and_audio" ? "['text', 'audio']" : "['text']"},
-        turnDetection: {
-          type: 'server_vad',
-          threshold: ${pgState.sessionConfig.vadThreshold},
-          silence_duration_ms: ${pgState.sessionConfig.vadSilenceDurationMs},
-          prefix_padding_ms: ${pgState.sessionConfig.vadPrefixPaddingMs},
-        },
       }),
+      voiceOptions: {
+        maxToolSteps: 5,
+      },
     });
 
-    await agent.start(ctx.room)
+    await session.start({
+      agent,
+      room: ctx.room,
+    });
+    session.generateReply({ toolChoice: 'none' });
+    session.on(voice.AgentSessionEventTypes.MetricsCollected, (ev) => {
+      console.log('metrics_collected', ev);
+    });
   },
 });
 
-cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url), workerType: JobType.JT_ROOM }));
+cli.runApp(new WorkerOptions({ agent: fileURLToPath(import.meta.url) }));
 `;
 
   const codeString = language === "python" ? pythonCode : typescriptCode;
