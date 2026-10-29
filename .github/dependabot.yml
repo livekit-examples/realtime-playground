@@ -3,23 +3,23 @@
 # when an advisory lands; the schedule only applies if version updates are turned on.
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/web"
+  - package-ecosystem: npm
+    directory: /web
     schedule:
-      interval: "quarterly"
+      interval: quarterly
     open-pull-requests-limit: 0
     groups:
       security:
-        applies-to: "security-updates"
+        applies-to: security-updates
         patterns:
           - "*"
-  - package-ecosystem: "pip"
-    directory: "/agent"
+  - package-ecosystem: pip
+    directory: /agent
     schedule:
-      interval: "quarterly"
+      interval: quarterly
     open-pull-requests-limit: 0
     groups:
       security:
-        applies-to: "security-updates"
+        applies-to: security-updates
         patterns:
           - "*"
