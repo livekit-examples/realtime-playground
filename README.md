@@ -1,3 +1,6 @@
+> [!WARNING]
+> This example is archived and no longer maintained. For current examples, see [LiveKit Agents examples](https://github.com/livekit/agents/tree/main/examples) and [agent-starter-react](https://github.com/livekit-examples/agent-starter-react).
+
 # LiveKit + OpenAI Realtime Playground
 
 This project is an interactive playground that demonstrates the capabilities of OpenAI's Realtime API, allowing users to experiment with the API directly in their browser. It's built on top of LiveKit Agents.
